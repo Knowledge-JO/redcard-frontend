@@ -1,0 +1,16 @@
+{
+  "input": {
+    "placeholder_currency": "Enter amount"
+  },
+  "tickets": {
+    "text": "Number of tickets",
+    "placeholder_ticket": "type amount of tickets"
+  },
+  "envelope": {
+    "text": "Red envelope cover",
+    "pick": "Pick cover"
+  },
+  "image_covers": {
+    "covers": ["Year of the dragon", "Bright future", "Good luck and good luck"]
+  }
+}

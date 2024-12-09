@@ -1,0 +1,16 @@
+{
+  "input": {
+    "placeholder_currency": "输入金额"
+  },
+  "tickets": {
+    "text": "门票数量",
+    "placeholder_ticket": "类型 门票数量"
+  },
+  "envelope": {
+    "text": "红包封面",
+    "pick": "挑盖"
+  },
+  "image_covers": {
+    "covers": ["龙年", "光明的未来", "祝你好运，祝你好运"]
+  }
+}
