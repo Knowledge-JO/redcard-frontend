@@ -10,6 +10,9 @@
     "text": "红包封面",
     "pick": "挑盖"
   },
+  "telegram_channel": {
+    "text": "电报频道"
+  },
   "image_covers": {
     "covers": ["龙年", "光明的未来", "祝你好运，祝你好运"]
   }

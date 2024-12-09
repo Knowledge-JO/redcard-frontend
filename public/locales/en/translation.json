@@ -10,6 +10,9 @@
     "text": "Red envelope cover",
     "pick": "Pick cover"
   },
+  "telegram_channel": {
+    "text": "Telegram channel"
+  },
   "image_covers": {
     "covers": ["Year of the dragon", "Bright future", "Good luck and good luck"]
   }

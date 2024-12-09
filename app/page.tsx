@@ -112,7 +112,7 @@ export default function Home() {
               <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
                 <div className="flex items-center gap-2">
                   <HiUserGroup className="text-yellow-500 text-2xl" />
-                  <p>Telegram channel</p>
+                  <p>{t("telegram_channel.text")}</p>
                 </div>
 
                 <HiOutlineChevronRight />
