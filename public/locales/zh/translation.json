@@ -1,6 +1,12 @@
 {
+  "main_header": {
+    "text": "发红包",
+    "lang": "语言"
+  },
   "input": {
-    "placeholder_currency": "输入金额"
+    "placeholder_currency": "输入金额",
+    "currency_title": "货币",
+    "select_currency": "选择货币"
   },
   "tickets": {
     "text": "门票数量",
@@ -8,12 +14,22 @@
   },
   "envelope": {
     "text": "红包封面",
-    "pick": "挑盖"
+    "pick": "挑盖",
+    "header": "选择封面"
   },
   "telegram_channel": {
-    "text": "电报频道"
+    "text": "电报频道",
+    "header": "选择电报频道",
+    "message": "目前没有频道"
+  },
+  "message": {
+    "placeholder": "输入消息"
   },
   "image_covers": {
     "covers": ["龙年", "光明的未来", "祝你好运，祝你好运"]
+  },
+
+  "submit_button": {
+    "text": "提交"
   }
 }

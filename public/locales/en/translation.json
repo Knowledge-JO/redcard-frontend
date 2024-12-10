@@ -1,6 +1,12 @@
 {
+  "main_header": {
+    "text": "Send red envelopes",
+    "lang": "Languages"
+  },
   "input": {
-    "placeholder_currency": "Enter amount"
+    "placeholder_currency": "Enter amount",
+    "currency_title": "currencies",
+    "select_currency": "Select currency"
   },
   "tickets": {
     "text": "Number of tickets",
@@ -8,12 +14,22 @@
   },
   "envelope": {
     "text": "Red envelope cover",
-    "pick": "Pick cover"
+    "pick": "Pick cover",
+    "header": "Select cover"
   },
   "telegram_channel": {
-    "text": "Telegram channel"
+    "text": "Telegram channel",
+    "header": "Select telegram channel",
+    "message": "No channels currently"
+  },
+  "message": {
+    "placeholder": "Type message"
   },
   "image_covers": {
     "covers": ["Year of the dragon", "Bright future", "Good luck and good luck"]
+  },
+
+  "submit_button": {
+    "text": "Submit"
   }
 }

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { usePublicContext } from "@/context/PublicProvider";
 import {
   cloneElement,
   createContext,
@@ -10,7 +11,6 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
-  useState,
 } from "react";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 
@@ -28,7 +28,7 @@ const defaultValues: DefaultTypes = {
 const modalContext = createContext(defaultValues);
 
 function Modal({ children }: { children: ReactNode }) {
-  const [activeId, setActiveId] = useState("");
+  const { activeId, setActiveId } = usePublicContext();
   const open = setActiveId;
   const close = () => setActiveId("");
   return (

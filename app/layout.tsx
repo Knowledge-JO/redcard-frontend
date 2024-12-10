@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import I18n from "./I18n";
+import { PublicProvider } from "@/context/PublicProvider";
+import ProtectedRoute from "./ProtectedRoute";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,7 +31,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-lg mx-auto`}
       >
-        <I18n>{children}</I18n>
+        <PublicProvider>
+          <ProtectedRoute>
+            <I18n>{children}</I18n>
+          </ProtectedRoute>
+        </PublicProvider>
       </body>
     </html>
   );

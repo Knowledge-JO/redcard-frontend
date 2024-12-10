@@ -1,6 +1,7 @@
 import RedForm from "@/components/ui/RedForm";
 
-function Page() {
+async function Page() {
+  // console.log(await getChecks());
   return (
     <div>
       <RedForm />
