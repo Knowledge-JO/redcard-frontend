@@ -18,8 +18,6 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setPlatform(WebApp.platform);
     if (!user_name) return;
 
-    WebApp.expand();
-
     console.log({ user_name, first_name });
 
     setUsername(user_name);
