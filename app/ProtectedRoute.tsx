@@ -7,7 +7,7 @@ import Image from "next/image";
 import noView from "@/public/noview.webp";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { username, setUserId, setUsername, setFirstName } = usePublicContext();
+  const { setUserId, setUsername, setFirstName } = usePublicContext();
 
   useEffect(() => {
     const user_name = WebApp.initDataUnsafe.user?.username;
@@ -21,9 +21,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setFirstName(first_name);
     setUserId(telegramId);
   }, [setUsername, setFirstName, setUserId]);
-  useEffect(() => {
-    WebApp.showAlert(username || "");
-  }, [username]);
+
   if (WebApp.platform == "tdesktop" || WebApp.platform == "unknown")
     return (
       <div className="flex flex-col items-center mt-16">
