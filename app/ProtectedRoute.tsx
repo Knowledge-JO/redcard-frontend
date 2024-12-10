@@ -20,6 +20,8 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
     WebApp.expand();
 
+    console.log({ user_name, first_name });
+
     setUsername(user_name);
     setFirstName(first_name);
     setUserId(telegramId);
