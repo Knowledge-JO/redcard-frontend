@@ -212,7 +212,10 @@ export default function RedForm() {
 
           <Button
             className="w-full bg-orange-600 hover:bg-orange-700 rounded-xl mt-5"
-            onClick={handleCreateCheck}
+            onClick={(e) => {
+              e.preventDefault();
+              handleCreateCheck();
+            }}
           >
             {isCreating ? <ClipLoader /> : t("submit_button.text")}
           </Button>
