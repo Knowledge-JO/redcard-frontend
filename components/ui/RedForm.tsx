@@ -21,10 +21,9 @@ import {
 
 import { usePublicContext } from "@/context/PublicProvider";
 import noview from "@/public/noview.webp";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import WebApp from "@twa-dev/sdk";
 import Navbar from "./Navbar";
 export default function RedForm() {
   const [selectedCover, setSelectedCover] = useState("");
@@ -33,10 +32,6 @@ export default function RedForm() {
   const { t } = useTranslation();
 
   const { setActiveId: close } = usePublicContext();
-
-  useEffect(() => {
-    WebApp.sendData(selectedCover);
-  }, [selectedCover]);
 
   const coverImages = [
     "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
