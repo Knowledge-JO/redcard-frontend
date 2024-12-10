@@ -1,18 +1,21 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { usePublicContext } from "@/context/PublicProvider";
 import WebApp from "@twa-dev/sdk";
+import { Platforms } from "@twa-dev/types";
 import Image from "next/image";
 import noView from "@/public/noview.webp";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { setUserId, setUsername, setFirstName } = usePublicContext();
+  const [platform, setPlatform] = useState<Platforms>();
 
   useEffect(() => {
     const user_name = WebApp.initDataUnsafe.user?.username;
     const first_name = WebApp.initDataUnsafe.user?.first_name;
     const telegramId = WebApp.initDataUnsafe.user?.id;
+    setPlatform(WebApp.platform);
     if (!user_name) return;
 
     WebApp.expand();
@@ -22,7 +25,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setUserId(telegramId);
   }, [setUsername, setFirstName, setUserId]);
 
-  if (WebApp.platform == "tdesktop" || WebApp.platform == "unknown")
+  if (platform == "tdesktop" || platform == "unknown")
     return (
       <div className="flex flex-col items-center mt-16">
         <div className="relative h-44 w-44">
