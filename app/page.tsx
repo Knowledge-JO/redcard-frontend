@@ -1,9 +1,9 @@
-import RedForm from "@/components/ui/RedForm";
+import Home from "@/components/ui/Home";
 
 function Page() {
   return (
     <div>
-      <RedForm />
+      <Home />
     </div>
   );
 }

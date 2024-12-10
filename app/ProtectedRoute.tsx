@@ -12,6 +12,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
   const [platform, setPlatform] = useState<Platforms>();
 
   useEffect(() => {
+    if (!window.Telegram) return console.log("Invalid environment");
     const user_name = WebApp.initDataUnsafe.user?.username;
     const first_name = WebApp.initDataUnsafe.user?.first_name;
     const telegramId = WebApp.initDataUnsafe.user?.id;

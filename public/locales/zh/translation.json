@@ -1,4 +1,11 @@
 {
+  "checks_active": {
+    "status": "积极的"
+  },
+
+  "checks_activated": {
+    "status": "活性"
+  },
   "main_header": {
     "text": "发红包",
     "lang": "语言"

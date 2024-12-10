@@ -1,4 +1,11 @@
 {
+  "checks_active": {
+    "status": "active"
+  },
+
+  "checks_activated": {
+    "status": "activated"
+  },
   "main_header": {
     "text": "Send red envelopes",
     "lang": "Languages"
