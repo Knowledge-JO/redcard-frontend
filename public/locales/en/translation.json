@@ -1,4 +1,8 @@
 {
+  "checks": {
+    "ticket_id": "TicketId",
+    "status": "status"
+  },
   "checks_active": {
     "status": "active"
   },

@@ -19,7 +19,7 @@ function Navbar() {
     <div className="bg-gray-200 text-stone-500 px-3 py-3 flex items-center justify-between">
       <p> {t("main_header.text")} </p>
 
-      <Select defaultValue="zh" onValueChange={(lang) => changeLanguage(lang)}>
+      <Select onValueChange={(lang) => changeLanguage(lang)}>
         <SelectTrigger className="w-[110px] h-fit border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
           <SelectValue placeholder="Select language" />
         </SelectTrigger>

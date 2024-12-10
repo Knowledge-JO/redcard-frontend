@@ -26,19 +26,46 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useRouter } from "next/navigation";
+import { CryptoCurrencyCode } from "crypto-bot-api";
+import { createCheck } from "@/lib/cryptoApi";
+
+import { ClipLoader } from "react-spinners";
+
+const coverImages = [
+  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
+  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover2.jpg",
+  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover3.jpg",
+];
+
 export default function RedForm() {
   const [selectedCover, setSelectedCover] = useState("");
+  const [amount, setAmount] = useState<string>();
+  const [asset, setAsset] = useState<CryptoCurrencyCode>();
+  const [tickets, setTickets] = useState<number>();
+
+  const [isCreating, setIsCreating] = useState(false);
+
+  const [errorCreating, setErrorCreating] = useState("");
+
   const router = useRouter();
 
   const { t } = useTranslation();
 
   const { setActiveId: close } = usePublicContext();
 
-  const coverImages = [
-    "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
-    "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover2.jpg",
-    "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover3.jpg",
-  ];
+  async function handleCreateCheck() {
+    if (!amount || !asset || !tickets) return;
+    setIsCreating(true);
+    try {
+      for (let i = 1; i <= tickets; i++) {
+        await createCheck({ amount, asset });
+      }
+    } catch (error) {
+      setErrorCreating(`${error}`);
+    } finally {
+      setIsCreating(false);
+    }
+  }
 
   return (
     <div className="">
@@ -54,7 +81,10 @@ export default function RedForm() {
       <div className="px-3 mt-5 ">
         <form className="">
           <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between">
-            <Select defaultValue="usdt">
+            <Select
+              defaultValue="USDT"
+              onValueChange={(value) => setAsset(value as CryptoCurrencyCode)}
+            >
               <SelectTrigger className="w-[90px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
                 <SelectValue placeholder={t("input.select_currency")} />
               </SelectTrigger>
@@ -73,6 +103,7 @@ export default function RedForm() {
               required
               className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
               placeholder={t("input.placeholder_currency")}
+              onChange={(e) => setAmount(e.target.value)}
             />
           </div>
 
@@ -84,8 +115,10 @@ export default function RedForm() {
 
             <input
               type="number"
+              min={1}
               className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
               placeholder={t("tickets.placeholder_ticket")}
+              onChange={(e) => setTickets(Number(e.target.value))}
             />
           </div>
 
@@ -177,9 +210,16 @@ export default function RedForm() {
             className="mt-4 ring-2 ring-orange-500 px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl focus:ring-offset-2"
           />
 
-          <Button className="w-full bg-orange-500 rounded-xl mt-5">
-            {t("submit_button.text")}
+          <Button
+            className="w-full bg-orange-600 hover:bg-orange-700 rounded-xl mt-5"
+            onClick={handleCreateCheck}
+          >
+            {isCreating ? <ClipLoader /> : t("submit_button.text")}
           </Button>
+
+          {errorCreating && (
+            <p className="text-red-600 mt-1">{errorCreating}</p>
+          )}
         </form>
       </div>
     </div>

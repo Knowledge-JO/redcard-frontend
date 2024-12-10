@@ -4,12 +4,17 @@ import { SelectItem } from "./select";
 const options = [
   {
     text: "BTC",
-    value: "btc",
+    value: "BTC",
     image: "/btc.png",
   },
   {
+    text: "TON",
+    value: "TON",
+    image: "/ton.png",
+  },
+  {
     text: "USDT",
-    value: "usdt",
+    value: "USDT",
     image: "/usdt.png",
   },
 ];

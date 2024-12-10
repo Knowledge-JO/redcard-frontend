@@ -1,4 +1,8 @@
 {
+  "checks": {
+    "ticket_id": "票证编号",
+    "status": "地位"
+  },
   "checks_active": {
     "status": "积极的"
   },

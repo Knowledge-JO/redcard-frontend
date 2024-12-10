@@ -3,6 +3,7 @@
 const endpoint = "https://testnet-pay.crypt.bot/api";
 
 import CryptoBotApi, { CreateCheckOptions } from "crypto-bot-api";
+import { revalidatePath } from "next/cache";
 
 const client = new CryptoBotApi(process.env.API_TOKEN || "", endpoint);
 
@@ -12,8 +13,9 @@ async function getMe() {
 }
 
 async function createCheck(data: CreateCheckOptions) {
-  const check = await client.createCheck(data);
-  return check;
+  await client.createCheck(data);
+
+  revalidatePath("/");
 }
 
 async function getChecks() {
