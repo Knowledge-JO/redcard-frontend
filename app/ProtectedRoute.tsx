@@ -21,8 +21,10 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setFirstName(first_name);
     setUserId(telegramId);
   }, [setUsername, setFirstName, setUserId]);
-
-  if (!username)
+  useEffect(() => {
+    WebApp.showAlert(username || "");
+  }, [username]);
+  if (WebApp.platform == "tdesktop" || WebApp.platform == "unknown")
     return (
       <div className="flex flex-col items-center mt-16">
         <div className="relative h-44 w-44">
