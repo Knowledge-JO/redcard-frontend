@@ -4,6 +4,7 @@ import "./globals.css";
 import I18n from "./I18n";
 import { PublicProvider } from "@/context/PublicProvider";
 import ProtectedRoute from "./ProtectedRoute";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <PublicProvider>
           <ProtectedRoute>
             <I18n>{children}</I18n>
+            <Toaster />
           </ProtectedRoute>
         </PublicProvider>
       </body>

@@ -6,13 +6,15 @@ import { useTranslation } from "react-i18next";
 import {
   HiMiniArrowTopRightOnSquare,
   HiMiniDocumentCheck,
+  HiMiniTrash,
   HiOutlineClipboardDocument,
 } from "react-icons/hi2";
 import { Button } from "./button";
 import Modal from "./Modal";
 import Navbar from "./Navbar";
 import RedForm from "./RedForm";
-
+import { deletePayCheck } from "@/lib/action";
+import { toast } from "sonner";
 function truncateText(text: string) {
   const a = text.slice(8, 14);
   const b = text.slice(text.length - 5);
@@ -31,6 +33,18 @@ function Home({ checks }: { checks: Check[] }) {
       setTimeout(() => setCopied(""), 2000);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function handelDelete(id: number) {
+    try {
+      await deletePayCheck(id);
+      toast(`Deleted check #${id} successfully`, { position: "top-right" });
+    } catch (error) {
+      toast("Error deleting check", {
+        description: `${error}`,
+        position: "top-right",
+      });
     }
   }
 
@@ -54,9 +68,15 @@ function Home({ checks }: { checks: Check[] }) {
               className="bg-gray-200 max-w-40 px-3 py-3 rounded-xl relative"
               key={check.id}
             >
-              <div className="bg-orange-600 text-stone-100 w-fit px-2 py-1 rounded-lg flex items-center justify-center text-sm absolute -top-0 left-0">
-                <p>{check.amount}</p>
-                <p>{check.asset}</p>
+              <div className="absolute -top-0 left-0 flex justify-between gap-2 w-full">
+                <div className="bg-orange-600 text-stone-100 w-fit px-2 py-1 rounded-lg flex items-center justify-center text-sm">
+                  <p>{check.amount}</p>
+                  <p>{check.asset}</p>
+                </div>
+
+                <div className="bg-orange-600 rounded-lg text-white px-2 py-1">
+                  <HiMiniTrash onClick={() => handelDelete(check.id)} />
+                </div>
               </div>
               <p className="text-stone-600 font-bold text-sm mt-8">
                 {t("checks.ticket_id")}: {check.id}{" "}

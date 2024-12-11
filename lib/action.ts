@@ -22,4 +22,9 @@ async function getBal(asset: CryptoCurrencyCode) {
   return balance.available;
 }
 
-export { createPayCheck, getBal };
+async function deletePayCheck(id: number) {
+  await client.deleteCheck(id);
+  revalidatePath("/");
+}
+
+export { createPayCheck, deletePayCheck, getBal };
