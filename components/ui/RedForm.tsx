@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CryptoCurrencyCode } from "crypto-bot-api";
-import { createCheck } from "@/lib/cryptoApi";
+import { createCheck } from "@/lib/action";
 
 import { ClipLoader } from "react-spinners";
 
