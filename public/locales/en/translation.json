@@ -3,7 +3,8 @@
     "ticket_id": "TicketId",
     "status": "status",
     "created_at": "CreatedAt",
-    "activated_at": "ActivatedAt"
+    "activated_at": "ActivatedAt",
+    "zero": "No checks available"
   },
   "checks_active": {
     "status": "active"
@@ -11,6 +12,9 @@
 
   "checks_activated": {
     "status": "activated"
+  },
+  "balance": {
+    "asset_balance": "balance"
   },
   "main_header": {
     "text": "Send red envelopes",

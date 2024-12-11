@@ -21,11 +21,11 @@ import {
 
 import { usePublicContext } from "@/context/PublicProvider";
 import noview from "@/public/noview.webp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CryptoCurrencyCode } from "crypto-bot-api";
-import { createCheck } from "@/lib/action";
+import { createCheck, getBalance } from "@/lib/action";
 
 import { ClipLoader } from "react-spinners";
 
@@ -38,6 +38,7 @@ const coverImages = [
 export default function RedForm() {
   const [selectedCover, setSelectedCover] = useState("");
   const [amount, setAmount] = useState<string>();
+  const [balance, setBalance] = useState("");
   const [asset, setAsset] = useState<CryptoCurrencyCode>();
   const [tickets, setTickets] = useState<number>();
 
@@ -48,6 +49,23 @@ export default function RedForm() {
   const { t } = useTranslation();
 
   const { setActiveId: close } = usePublicContext();
+
+  useEffect(() => {
+    async function balance() {
+      try {
+        if (!asset) return;
+        const bal = await getBalance(asset);
+        console.log(bal);
+        setBalance(bal);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    balance();
+
+    return () => {};
+  }, [asset]);
 
   async function handleCreateCheck() {
     if (!amount || !asset || !tickets) return;
@@ -76,6 +94,11 @@ export default function RedForm() {
       </div> */}
 
       <div className="px-3 mt-5 ">
+        {asset && (
+          <p className="text-stone-600 text-sm font-bold mb-2">
+            {t("balance.asset_balance")}: {balance}
+          </p>
+        )}
         <form className="">
           <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between">
             <Select

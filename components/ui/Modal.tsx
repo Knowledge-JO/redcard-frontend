@@ -12,6 +12,7 @@ import {
   SetStateAction,
   useContext,
 } from "react";
+import { createPortal } from "react-dom";
 import { HiArrowLeftOnRectangle } from "react-icons/hi2";
 
 type DefaultTypes = {
@@ -62,7 +63,7 @@ function Window({
   const { activeId, close } = useContext(modalContext);
 
   if (activeId !== openId) return null;
-  return (
+  return createPortal(
     <div className="fixed h-screen w-screen bg-white top-0 left-0">
       <div className="bg-gray-200 text-stone-500 px-3 py-3 flex items-center justify-between max-w-lg mx-auto">
         <HiArrowLeftOnRectangle className="text-2xl" onClick={close} />
@@ -71,7 +72,8 @@ function Window({
       </div>
 
       <div className="max-w-lg mx-auto">{children}</div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

@@ -3,7 +3,8 @@
     "ticket_id": "票证编号",
     "status": "地位",
     "created_at": "创建于",
-    "activated_at": "激活时间"
+    "activated_at": "激活时间",
+    "zero": "没有可用的支票"
   },
   "checks_active": {
     "status": "积极的"
@@ -11,6 +12,9 @@
 
   "checks_activated": {
     "status": "活性"
+  },
+  "balance": {
+    "asset_balance": "平衡"
   },
   "main_header": {
     "text": "发红包",
