@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CryptoCurrencyCode } from "crypto-bot-api";
-import { createCheck, getBalance } from "@/lib/action";
+import { createPayCheck, getBal } from "@/lib/action";
 
 import { ClipLoader } from "react-spinners";
 
@@ -54,7 +54,7 @@ export default function RedForm() {
     async function balance() {
       try {
         if (!asset) return;
-        const bal = await getBalance(asset);
+        const bal = await getBal(asset);
         console.log(bal);
         setBalance(bal);
       } catch (error) {
@@ -72,7 +72,7 @@ export default function RedForm() {
     setIsCreating(true);
     try {
       for (let i = 1; i <= tickets; i++) {
-        await createCheck({ amount, asset });
+        await createPayCheck({ amount, asset });
       }
       close("");
     } catch (error) {

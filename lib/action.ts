@@ -10,16 +10,16 @@ import { revalidatePath } from "next/cache";
 
 const client = new CryptoBotApi(process.env.API_TOKEN || "", endpoint);
 
-async function createCheck(data: CreateCheckOptions) {
+async function createPayCheck(data: CreateCheckOptions) {
   await client.createCheck(data);
 
   revalidatePath("/");
 }
 
-async function getBalance(asset: CryptoCurrencyCode) {
+async function getBal(asset: CryptoCurrencyCode) {
   const balance = await client.getBalance(asset);
 
   return balance.available;
 }
 
-export { createCheck, getBalance };
+export { createPayCheck, getBal };

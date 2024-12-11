@@ -1,6 +1,6 @@
-const endpoint = "https://testnet-pay.crypt.bot/api";
-
 import CryptoBotApi from "crypto-bot-api";
+
+const endpoint = "https://testnet-pay.crypt.bot/api";
 
 const client = new CryptoBotApi(process.env.API_TOKEN || "", endpoint);
 
