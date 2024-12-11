@@ -67,10 +67,10 @@ function Home({ checks }: { checks: Check[] }) {
     <div>
       <Navbar />
 
-      <div className="mt-8 px-3 grid grid-cols-2 gap-x-2 gap-y-5 justify-items-center">
+      <div className="mt-8 px-3 grid grid-cols-2 gap-x-2 gap-y-5 justify-items-center mb-16">
         {checks.map((check) => (
           <div
-            className="bg-gray-200 w-40 px-3 py-3 rounded-xl relative"
+            className="bg-gray-200 max-w-40 px-3 py-3 rounded-xl relative"
             key={check.id}
           >
             <div className="bg-orange-600 text-stone-100 w-fit px-2 py-1 rounded-lg flex items-center justify-center text-sm absolute -top-0 left-0">
@@ -129,7 +129,7 @@ function Home({ checks }: { checks: Check[] }) {
         ))}
       </div>
 
-      <div className="px-3 mt-8 font-bold flex items-center gap-2">
+      <div className="px-3 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
         <Button
           className="bg-orange-600 hover:bg-orange-700"
           onClick={() => router.push("/create")}

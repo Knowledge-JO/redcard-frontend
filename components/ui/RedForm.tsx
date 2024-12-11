@@ -60,6 +60,7 @@ export default function RedForm() {
       for (let i = 1; i <= tickets; i++) {
         await createCheck({ amount, asset });
       }
+      router.push("/");
     } catch (error) {
       setErrorCreating(`${error}`);
     } finally {
