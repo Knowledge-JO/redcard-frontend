@@ -13,7 +13,6 @@ import {
 import SelectItems from "@/components/ui/SelectItems";
 import Image from "next/image";
 import {
-  HiArrowLeftOnRectangle,
   HiGiftTop,
   HiOutlineChevronRight,
   HiPhoto,
@@ -25,7 +24,6 @@ import noview from "@/public/noview.webp";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useRouter } from "next/navigation";
 import { CryptoCurrencyCode } from "crypto-bot-api";
 import { createCheck } from "@/lib/cryptoApi";
 
@@ -47,8 +45,6 @@ export default function RedForm() {
 
   const [errorCreating, setErrorCreating] = useState("");
 
-  const router = useRouter();
-
   const { t } = useTranslation();
 
   const { setActiveId: close } = usePublicContext();
@@ -60,7 +56,7 @@ export default function RedForm() {
       for (let i = 1; i <= tickets; i++) {
         await createCheck({ amount, asset });
       }
-      router.push("/");
+      close("");
     } catch (error) {
       setErrorCreating(`${error}`);
     } finally {
@@ -70,14 +66,14 @@ export default function RedForm() {
 
   return (
     <div className="">
-      <div className="bg-gray-200 text-stone-500 px-3 py-3 flex items-center justify-between max-w-lg mx-auto">
+      {/* <div className="bg-gray-200 text-stone-500 px-3 py-3 flex items-center justify-between max-w-lg mx-auto">
         <HiArrowLeftOnRectangle
           className="text-2xl"
           onClick={() => router.push("/")}
         />
 
         <p>Create red card</p>
-      </div>
+      </div> */}
 
       <div className="px-3 mt-5 ">
         <form className="">
@@ -218,7 +214,11 @@ export default function RedForm() {
               handleCreateCheck();
             }}
           >
-            {isCreating ? <ClipLoader /> : t("submit_button.text")}
+            {isCreating ? (
+              <ClipLoader color="#fff" size={20} />
+            ) : (
+              t("submit_button.text")
+            )}
           </Button>
 
           {errorCreating && (

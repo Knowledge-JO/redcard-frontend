@@ -1,39 +1,17 @@
 "use client";
 
+import { Check } from "crypto-bot-api";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   HiMiniArrowTopRightOnSquare,
   HiMiniDocumentCheck,
   HiOutlineClipboardDocument,
 } from "react-icons/hi2";
-import Navbar from "./Navbar";
-import { useTranslation } from "react-i18next";
-import { Check } from "crypto-bot-api";
-import { useState } from "react";
 import { Button } from "./button";
-import { useRouter } from "next/navigation";
-
-// const checks = [
-//   {
-//     id: 1413533,
-//     hash: "CQVD288cvZnC",
-//     asset: "TON",
-//     amount: "0.01",
-//     botCheckUrl: "https://t.me/CryptoTestnetBot?start=CQVD288cvZnC",
-//     status: "activated",
-//     createdAt: "2024-12-09T23:44:32.515Z",
-//     activatedAt: "2024-12-09T23:44:53.120Z",
-//   },
-//   {
-//     id: 12786,
-//     hash: "THIDJcvZnC",
-//     asset: "TON",
-//     amount: "0.01",
-//     botCheckUrl: "https://t.me/CryptoTestnetBot?start=CQVD288cvZnC",
-//     status: "activated",
-//     createdAt: "2024-12-09T23:44:32.515Z",
-//     activatedAt: "2024-12-09T23:44:53.120Z",
-//   },
-// ];
+import Modal from "./Modal";
+import Navbar from "./Navbar";
+import RedForm from "./RedForm";
 
 function truncateText(text: string) {
   const a = text.slice(8, 14);
@@ -45,8 +23,6 @@ function truncateText(text: string) {
 function Home({ checks }: { checks: Check[] }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState("");
-
-  const router = useRouter();
 
   async function handleCopy(data: string) {
     try {
@@ -130,13 +106,18 @@ function Home({ checks }: { checks: Check[] }) {
       </div>
 
       <div className="px-3 py-5 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
-        <Button
-          className="bg-orange-600 hover:bg-orange-700"
-          onClick={() => router.push("/create")}
-        >
-          <p> Create new envelopes</p>
-          <HiMiniArrowTopRightOnSquare />
-        </Button>
+        <Modal>
+          <Modal.Open openId="form">
+            <Button className="bg-orange-600 hover:bg-orange-700">
+              <p> Create new envelopes</p>
+              <HiMiniArrowTopRightOnSquare />
+            </Button>
+          </Modal.Open>
+
+          <Modal.Window openId="form" title="Create red card">
+            <RedForm />
+          </Modal.Window>
+        </Modal>
       </div>
     </div>
   );
