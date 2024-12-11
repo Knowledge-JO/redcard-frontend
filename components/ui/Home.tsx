@@ -111,14 +111,14 @@ function Home({ checks }: { checks: Check[] }) {
             </div>
 
             <div className="mt-3">
-              <p className="text-sm text-stone-500">
-                CreatedAt:{" "}
+              <p className="text-xs text-stone-500">
+                {t("checks.created_at")}:{" "}
                 <span className="text-xs">{formatDate(check.createdAt)}</span>
               </p>
 
               {check.activatedAt && (
-                <p className="text-sm text-stone-500 mt-2">
-                  ActivatedAt:{" "}
+                <p className="text-xs text-stone-500 mt-2">
+                  {t("checks.activated_at")}:{" "}
                   <span className="text-xs">
                     {formatDate(check.activatedAt)}
                   </span>

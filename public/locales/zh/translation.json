@@ -1,7 +1,9 @@
 {
   "checks": {
     "ticket_id": "票证编号",
-    "status": "地位"
+    "status": "地位",
+    "created_at": "创建于",
+    "activated_at": "激活时间"
   },
   "checks_active": {
     "status": "积极的"
