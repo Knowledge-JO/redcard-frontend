@@ -79,7 +79,6 @@ export default function RedForm() {
         <form className="">
           <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between">
             <Select
-              defaultValue="USDT"
               onValueChange={(value) => setAsset(value as CryptoCurrencyCode)}
             >
               <SelectTrigger className="w-[90px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
