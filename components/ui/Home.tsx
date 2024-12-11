@@ -129,7 +129,7 @@ function Home({ checks }: { checks: Check[] }) {
         ))}
       </div>
 
-      <div className="px-3 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
+      <div className="px-3 py-5 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
         <Button
           className="bg-orange-600 hover:bg-orange-700"
           onClick={() => router.push("/create")}
