@@ -15,6 +15,7 @@ import RedForm from "./RedForm";
 import { deletePayCheck } from "@/lib/action";
 import { toast } from "sonner";
 import { useChecks } from "@/hooks/useChecks";
+import { useDeleteCheck } from "@/hooks/useDeleteCheck";
 function truncateText(text: string) {
   const a = text.slice(8, 14);
   const b = text.slice(text.length - 5);
@@ -27,6 +28,7 @@ function Home() {
   const [copied, setCopied] = useState("");
 
   const { checks } = useChecks();
+  const { deleteCheck } = useDeleteCheck();
 
   async function handleCopy(data: string) {
     try {
@@ -39,15 +41,15 @@ function Home() {
   }
 
   async function handelDelete(id: number) {
-    try {
-      await deletePayCheck(id);
-      toast(`Deleted check #${id} successfully`, { position: "top-right" });
-    } catch (error) {
-      toast("Error deleting check", {
-        description: `${error}`,
-        position: "top-right",
-      });
-    }
+    deleteCheck(id, {
+      onSuccess: () =>
+        toast(`Deleted check #${id} successfully`, { position: "top-right" }),
+      onError: (error) =>
+        toast("Error deleting check", {
+          description: `${error}`,
+          position: "top-right",
+        }),
+    });
   }
 
   function formatDate(date: Date) {
