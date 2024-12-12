@@ -12,7 +12,6 @@ import { Button } from "./button";
 import Modal from "./Modal";
 import Navbar from "./Navbar";
 import RedForm from "./RedForm";
-import { deletePayCheck } from "@/lib/action";
 import { toast } from "sonner";
 import { useChecks } from "@/hooks/useChecks";
 import { useDeleteCheck } from "@/hooks/useDeleteCheck";
