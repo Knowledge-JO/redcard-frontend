@@ -10,8 +10,12 @@ async function getMe() {
 }
 
 async function getChecks() {
-  const checks = await client.getChecks();
-  return checks;
+  try {
+    const checks = await client.getChecks();
+    return checks;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export { getMe, getChecks };
