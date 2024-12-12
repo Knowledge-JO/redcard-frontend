@@ -11,7 +11,7 @@ export function useCreateCheck(tickets: number) {
       for (let i = 1; i <= tickets; i++) {
         await createPayCheck(data);
       }
-      queryClient.invalidateQueries();
+      await queryClient.invalidateQueries();
     },
   });
 
