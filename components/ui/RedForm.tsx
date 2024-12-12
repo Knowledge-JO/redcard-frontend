@@ -25,9 +25,10 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { CryptoCurrencyCode } from "crypto-bot-api";
-import { createPayCheck, getBal } from "@/lib/action";
+import { getBal } from "@/lib/action";
 
 import { ClipLoader } from "react-spinners";
+import { useCreateCheck } from "@/hooks/useCreateCheck";
 
 const coverImages = [
   "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
@@ -50,6 +51,8 @@ export default function RedForm() {
 
   const { setActiveId: close } = usePublicContext();
 
+  const { createCheck } = useCreateCheck(tickets!);
+
   useEffect(() => {
     async function balance() {
       try {
@@ -70,16 +73,16 @@ export default function RedForm() {
   async function handleCreateCheck() {
     if (!amount || !asset || !tickets) return;
     setIsCreating(true);
-    try {
-      for (let i = 1; i <= tickets; i++) {
-        await createPayCheck({ amount, asset });
+    createCheck(
+      { amount, asset },
+      {
+        onSuccess: () => close(""),
+        onError: (error) => {
+          setErrorCreating(error.message);
+          setIsCreating(false);
+        },
       }
-      close("");
-    } catch (error) {
-      setErrorCreating(`${error}`);
-    } finally {
-      setIsCreating(false);
-    }
+    );
   }
 
   return (
@@ -235,6 +238,7 @@ export default function RedForm() {
               e.preventDefault();
               handleCreateCheck();
             }}
+            disabled={isCreating}
           >
             {isCreating ? (
               <ClipLoader color="#fff" size={20} />

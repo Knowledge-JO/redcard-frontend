@@ -1,6 +1,5 @@
 "use client";
 
-import { Check } from "crypto-bot-api";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,6 +14,7 @@ import Navbar from "./Navbar";
 import RedForm from "./RedForm";
 import { deletePayCheck } from "@/lib/action";
 import { toast } from "sonner";
+import { useChecks } from "@/hooks/useChecks";
 function truncateText(text: string) {
   const a = text.slice(8, 14);
   const b = text.slice(text.length - 5);
@@ -22,9 +22,11 @@ function truncateText(text: string) {
   return `${a}...${b}`;
 }
 
-function Home({ checks }: { checks: Check[] }) {
+function Home() {
   const { t } = useTranslation();
   const [copied, setCopied] = useState("");
+
+  const { checks } = useChecks();
 
   async function handleCopy(data: string) {
     try {
@@ -58,12 +60,12 @@ function Home({ checks }: { checks: Check[] }) {
       <Navbar />
 
       <div className="mt-8 px-3 grid grid-cols-2 gap-x-2 gap-y-5 justify-items-center mb-16">
-        {checks.length == 0 ? (
+        {checks?.length == 0 ? (
           <div className="">
             <p className="text-stone-600">{t("checks.zero")}</p>
           </div>
         ) : (
-          checks.map((check) => (
+          checks?.map((check) => (
             <div
               className="bg-gray-200 max-w-40 px-3 py-3 rounded-xl relative"
               key={check.id}

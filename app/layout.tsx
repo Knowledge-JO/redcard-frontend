@@ -5,6 +5,7 @@ import I18n from "./I18n";
 import { PublicProvider } from "@/context/PublicProvider";
 import ProtectedRoute from "./ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
+import ReactQuery from "./ReactQuery";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,12 +33,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-lg mx-auto`}
       >
-        <PublicProvider>
-          <ProtectedRoute>
-            <I18n>{children}</I18n>
-            <Toaster />
-          </ProtectedRoute>
-        </PublicProvider>
+        <ReactQuery>
+          <PublicProvider>
+            <ProtectedRoute>
+              <I18n>{children}</I18n>
+              <Toaster />
+            </ProtectedRoute>
+          </PublicProvider>
+        </ReactQuery>
       </body>
     </html>
   );

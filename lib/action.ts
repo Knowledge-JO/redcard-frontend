@@ -6,14 +6,16 @@ import CryptoBotApi, {
   CreateCheckOptions,
   CryptoCurrencyCode,
 } from "crypto-bot-api";
-import { revalidatePath } from "next/cache";
 
 const client = new CryptoBotApi(process.env.API_TOKEN || "", endpoint);
 
+async function getChecks() {
+  const checks = await client.getChecks();
+  return checks;
+}
+
 async function createPayCheck(data: CreateCheckOptions) {
   await client.createCheck(data);
-
-  revalidatePath("/");
 }
 
 async function getBal(asset: CryptoCurrencyCode) {
@@ -24,7 +26,6 @@ async function getBal(asset: CryptoCurrencyCode) {
 
 async function deletePayCheck(id: number) {
   await client.deleteCheck(id);
-  revalidatePath("/");
 }
 
-export { createPayCheck, deletePayCheck, getBal };
+export { getChecks, createPayCheck, deletePayCheck, getBal };
