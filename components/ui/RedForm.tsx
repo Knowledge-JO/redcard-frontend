@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,9 @@ import SelectItems from "@/components/ui/SelectItems";
 import Image from "next/image";
 import {
   HiGiftTop,
-  HiOutlineChevronRight,
-  HiPhoto,
-  HiUserGroup,
+  // HiOutlineChevronRight,
+  // HiPhoto,
+  // HiUserGroup,
 } from "react-icons/hi2";
 
 import { usePublicContext } from "@/context/PublicProvider";
@@ -78,7 +79,11 @@ export default function RedForm() {
       {
         onSuccess: () => close(""),
         onError: (error) => {
-          setErrorCreating(error.message);
+          setErrorCreating(
+            +balance < +amount * tickets
+              ? "Insufficient balance, please deposit via the bot."
+              : "Error creating tickets"
+          );
           setIsCreating(false);
         },
       }
@@ -145,7 +150,7 @@ export default function RedForm() {
           </div>
 
           <Modal>
-            <Modal.Open openId="cover">
+            {/* <Modal.Open openId="cover">
               <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
                 <div className="flex items-center gap-2">
                   <HiPhoto className="text-red-600 text-2xl" />
@@ -168,7 +173,7 @@ export default function RedForm() {
 
                 <HiOutlineChevronRight />
               </div>
-            </Modal.Open>
+            </Modal.Open> */}
 
             <Modal.Window openId={"cover"} title={t("envelope.header")}>
               <div className="mt-5 grid grid-cols-3 gap-3 justify-items-center px-3">
