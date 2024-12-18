@@ -23,7 +23,9 @@
   "input": {
     "placeholder_currency": "Enter amount",
     "currency_title": "currencies",
-    "select_currency": "Select currency"
+    "select_currency": "Select currency",
+    "select_ticket_type": "Select ticket type",
+    "select_ticket_mode": "Select ticket mode"
   },
   "tickets": {
     "text": "Number of tickets",

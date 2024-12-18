@@ -1,19 +1,24 @@
 "use client";
 
-import { createPayCheck } from "@/lib/action";
+import { TicketType } from "@/lib/dataTypes";
+import { insertRedCard } from "@/lib/supabaseAction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateCheckOptions } from "crypto-bot-api";
 
-export function useCreateCheck(tickets: number) {
+export function useCreateCheck() {
   const queryClient = useQueryClient();
-  const { mutate: createCheck } = useMutation({
-    mutationFn: async (data: CreateCheckOptions) => {
-      for (let i = 1; i <= tickets; i++) {
-        await createPayCheck(data);
-      }
+  const { mutate: createCheck, isPending: isCreating } = useMutation({
+    mutationFn: async ({
+      data,
+      image,
+    }: {
+      data: TicketType;
+      image: FormData;
+    }) => {
+      await insertRedCard(data, image);
+
       await queryClient.invalidateQueries();
     },
   });
 
-  return { createCheck };
+  return { createCheck, isCreating };
 }

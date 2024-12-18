@@ -2,22 +2,35 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Modal from "@/components/ui/Modal";
+import Modal from "./Modal";
 import {
   Select,
   SelectContent,
   SelectGroup,
+  SelectItem,
   SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import SelectItems from "@/components/ui/SelectItems";
 import Image from "next/image";
 import {
   HiGiftTop,
-  // HiOutlineChevronRight,
-  // HiPhoto,
-  // HiUserGroup,
+  HiMiniArrowTopRightOnSquare,
+  HiOutlineChevronRight,
+  HiPhoto,
+  HiUserGroup,
 } from "react-icons/hi2";
 
 import { usePublicContext } from "@/context/PublicProvider";
@@ -30,6 +43,9 @@ import { getBal } from "@/lib/action";
 
 import { ClipLoader } from "react-spinners";
 import { useCreateCheck } from "@/hooks/useCreateCheck";
+import { TicketType } from "@/lib/dataTypes";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const coverImages = [
   "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
@@ -38,13 +54,17 @@ const coverImages = [
 ];
 
 export default function RedForm() {
-  const [selectedCover, setSelectedCover] = useState("");
+  const [selectedCover, setSelectedCover] = useState({ url: "", text: "" });
+  const [selectedImage, setSelectedImage] = useState<File>();
   const [amount, setAmount] = useState<string>();
   const [balance, setBalance] = useState("");
   const [asset, setAsset] = useState<CryptoCurrencyCode>();
   const [tickets, setTickets] = useState<number>();
+  const [message, setMessage] = useState("");
+  const [mode, setMode] = useState("");
+  const [type, setType] = useState("fixed");
 
-  const [isCreating, setIsCreating] = useState(false);
+  const [password, setPassword] = useState("");
 
   const [errorCreating, setErrorCreating] = useState("");
 
@@ -52,7 +72,9 @@ export default function RedForm() {
 
   const { setActiveId: close } = usePublicContext();
 
-  const { createCheck } = useCreateCheck(tickets!);
+  const { createCheck, isCreating } = useCreateCheck();
+
+  const router = useRouter();
 
   useEffect(() => {
     async function balance() {
@@ -71,48 +93,132 @@ export default function RedForm() {
     return () => {};
   }, [asset]);
 
+  useEffect(() => {
+    if (!errorCreating) return;
+    setTimeout(() => setErrorCreating(""), 2000);
+  }, [errorCreating]);
+
   async function handleCreateCheck() {
-    if (!amount || !asset || !tickets) return;
-    setIsCreating(true);
+    if (!amount || !asset || !tickets)
+      return setErrorCreating(
+        "Provide amount, choose asset, and number of tickets"
+      );
+
+    if (mode == "password" && !password)
+      return setErrorCreating("Provide a password");
+
+    if (type == "fixed") {
+      if (Number(amount) * tickets > Number(balance))
+        return setErrorCreating("Insufficient balance");
+    }
+
+    if (type == "lucky") {
+      if (Number(amount) > Number(balance))
+        return setErrorCreating("Insufficient balance");
+    }
+    const data: TicketType = {
+      amount: amount,
+      type,
+      mode,
+      noOfTickets: tickets,
+      cover: selectedCover.url,
+      asset,
+      userId: 1,
+      message,
+      password,
+    };
+
+    const formData = new FormData();
+    formData.append("image", selectedImage as Blob);
     createCheck(
-      { amount, asset },
+      { data, image: formData },
       {
-        onSuccess: () => close(""),
+        onSuccess: () => router.push("/"),
         onError: (error) => {
-          setErrorCreating(
-            +balance < +amount * tickets
-              ? "Insufficient balance, please deposit via the bot."
-              : "Error creating tickets"
-          );
-          setIsCreating(false);
+          setErrorCreating(error.message);
         },
       }
     );
   }
 
+  function fileReader(image: FileList | null) {
+    if (!image) return;
+    const file = image[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if (reader.result instanceof ArrayBuffer) return;
+      setSelectedCover({ text: file.name, url: reader.result || "" });
+    };
+    reader.readAsDataURL(file);
+  }
+
   return (
     <div className="">
-      {/* <div className="bg-gray-200 text-stone-500 px-3 py-3 flex items-center justify-between max-w-lg mx-auto">
-        <HiArrowLeftOnRectangle
-          className="text-2xl"
-          onClick={() => router.push("/")}
-        />
-
-        <p>Create red card</p>
-      </div> */}
-
-      <div className="px-3 mt-5 ">
+      <div className="px-3 mt-5">
         {asset && (
           <p className="text-stone-600 text-sm font-bold mb-2">
             {t("balance.asset_balance")}: {balance}
           </p>
         )}
         <form className="">
-          <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between">
+          <div className={`flex gap-3  ${asset ? "mt-4" : "mt-8"}`}>
+            <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
+              <Select
+                required
+                onValueChange={(value) => setType(value)}
+                value={type}
+              >
+                <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+                  <SelectValue placeholder={t("input.select_ticket_type")} />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Red packet types</SelectLabel>
+                    <SelectItem value="fixed">Fixed red packet</SelectItem>
+                    <SelectItem value="lucky">Lucky red packet</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
+              <Select required onValueChange={(value) => setMode(value)}>
+                <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+                  <SelectValue placeholder={t("input.select_ticket_mode")} />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Red packet modes</SelectLabel>
+                    <SelectItem value="normal">Normal red packet</SelectItem>
+                    <SelectItem value="password">
+                      Password red packet
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {mode == "password" && (
+            <div className="bg-gray-200 rounded-xl h-10 flex items-center justify-between mt-4 max-w-full">
+              <input
+                type="text"
+                className="bg-transparent text-stone-600 h-full w-full px-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500  focus:ring-offset-2"
+                placeholder="Enter packet password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          )}
+
+          <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between mt-4 max-w-full">
             <Select
               onValueChange={(value) => setAsset(value as CryptoCurrencyCode)}
             >
-              <SelectTrigger className="w-[90px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+              <SelectTrigger className="w-[110px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
                 <SelectValue placeholder={t("input.select_currency")} />
               </SelectTrigger>
 
@@ -129,7 +235,11 @@ export default function RedForm() {
               min={0}
               required
               className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
-              placeholder={t("input.placeholder_currency")}
+              placeholder={
+                type == "fixed"
+                  ? t("input.placeholder_currency")
+                  : "Enter total amount"
+              }
               onChange={(e) => setAmount(e.target.value)}
             />
           </div>
@@ -150,7 +260,7 @@ export default function RedForm() {
           </div>
 
           <Modal>
-            {/* <Modal.Open openId="cover">
+            <Modal.Open openId="cover">
               <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
                 <div className="flex items-center gap-2">
                   <HiPhoto className="text-red-600 text-2xl" />
@@ -158,7 +268,7 @@ export default function RedForm() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <p>{selectedCover || t("envelope.pick")}</p>
+                  <p>{selectedCover.text || t("envelope.pick")}</p>
                   <HiOutlineChevronRight />
                 </div>
               </div>
@@ -173,22 +283,23 @@ export default function RedForm() {
 
                 <HiOutlineChevronRight />
               </div>
-            </Modal.Open> */}
+            </Modal.Open>
 
             <Modal.Window openId={"cover"} title={t("envelope.header")}>
               <div className="mt-5 grid grid-cols-3 gap-3 justify-items-center px-3">
                 {coverImages.map((cover, index) => (
                   <div
-                    className="bg-gray-200 w-[120px]  rounded-xl"
+                    className="bg-gray-200 w-[110px] rounded-xl"
                     key={cover}
                     onClick={() => {
-                      setSelectedCover(
-                        (
+                      setSelectedCover({
+                        url: cover,
+                        text: (
                           t("image_covers.covers", {
                             returnObjects: true,
                           }) as string[]
-                        )[index]
-                      );
+                        )[index],
+                      });
 
                       close("");
                     }}
@@ -201,7 +312,7 @@ export default function RedForm() {
                         className="object-cover rounded-xl"
                       />
                     </div>
-                    <p className="text-xs text-center text-stone-600 py-2">
+                    <p className="text-xs px-2 text-center text-stone-600 py-2">
                       {
                         (
                           t("image_covers.covers", {
@@ -212,6 +323,25 @@ export default function RedForm() {
                     </p>
                   </div>
                 ))}
+              </div>
+              <div className="px-3 py-5 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
+                <div className="flex text-white items-center px-2 py-2 bg-orange-600 hover:bg-orange-700 rounded-xl gap-1">
+                  <label htmlFor="cover-image" className="text-sm">
+                    Upload cover
+                  </label>
+                  <input
+                    className="hidden"
+                    id="cover-image"
+                    type="file"
+                    onChange={(e) => {
+                      if (!e.target.files) return;
+                      setSelectedImage(e.target.files[0]);
+                      fileReader(e.target.files);
+                      close("");
+                    }}
+                  />
+                  <HiMiniArrowTopRightOnSquare />
+                </div>
               </div>
             </Modal.Window>
 
@@ -235,26 +365,58 @@ export default function RedForm() {
           <textarea
             placeholder={t("message.placeholder")}
             className="mt-4 ring-2 ring-orange-500 px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl focus:ring-offset-2"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
           />
 
-          <Button
-            className="w-full bg-orange-600 hover:bg-orange-700 rounded-xl mt-5"
-            onClick={(e) => {
-              e.preventDefault();
-              handleCreateCheck();
-            }}
-            disabled={isCreating}
-          >
-            {isCreating ? (
-              <ClipLoader color="#fff" size={20} />
-            ) : (
-              t("submit_button.text")
-            )}
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full bg-orange-600 hover:bg-orange-700 rounded-xl mt-5">
+                Continue
+              </Button>
+            </DialogTrigger>
 
-          {errorCreating && (
-            <p className="text-red-600 mt-1">{errorCreating}</p>
-          )}
+            <DialogContent className="w-fit rounded-xl">
+              <DialogTitle>Review redcard</DialogTitle>
+
+              <div className="w-60 mx-auto">
+                <div className="w-60 h-72 relative rounded-xl">
+                  <Image
+                    src={selectedCover.url}
+                    alt=""
+                    fill
+                    className="object-cover rounded-xl"
+                  />
+                </div>
+
+                <div className="text-center text-sm">
+                  <p className="my-2">{message}</p>
+                  <p className="text-xs">
+                    {asset} Red envelope: {amount}
+                    {asset} / {tickets} tickets
+                  </p>
+                  <Button
+                    className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCreateCheck();
+                    }}
+                    disabled={isCreating}
+                  >
+                    {isCreating ? (
+                      <ClipLoader color="#fff" size={20} />
+                    ) : (
+                      "Create"
+                    )}
+                  </Button>
+
+                  {errorCreating && (
+                    <p className="text-red-600 mt-1">{errorCreating}</p>
+                  )}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </form>
       </div>
     </div>

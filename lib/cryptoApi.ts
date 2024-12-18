@@ -1,4 +1,4 @@
-import CryptoBotApi from "crypto-bot-api";
+import CryptoBotApi, { CreateCheckOptions } from "crypto-bot-api";
 
 const endpoint = "https://testnet-pay.crypt.bot/api";
 
@@ -18,4 +18,9 @@ async function getChecks() {
   }
 }
 
-export { getMe, getChecks };
+async function createPayCheck(data: CreateCheckOptions) {
+  const check = await client.createCheck(data);
+  return check;
+}
+
+export { getMe, getChecks, createPayCheck };
