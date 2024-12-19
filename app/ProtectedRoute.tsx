@@ -19,7 +19,7 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setPlatform(WebApp.platform);
     if (!user_name) return;
 
-    console.log({ user_name, first_name });
+    console.log({ user_name, first_name }, WebApp.initDataUnsafe.start_param);
 
     setUsername(user_name);
     setFirstName(first_name);

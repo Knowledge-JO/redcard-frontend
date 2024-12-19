@@ -8,6 +8,8 @@ import { useClaimPacket } from "@/hooks/useClaimPacket";
 import WebApp from "@twa-dev/sdk";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./dialog";
 import { useState } from "react";
+import { HiMiniShare } from "react-icons/hi2";
+import { createTelegramShareLink } from "@/lib/utils";
 
 const supabaseUrl = "https://oghibjysbqokcedkbicl.supabase.co";
 const defaultImage =
@@ -44,8 +46,24 @@ function Packet({ id }: { id: string }) {
       }
     );
   }
+
+  async function handleShare(createdId: number | undefined) {
+    const url = createTelegramShareLink(
+      `https://t.me/redcardfestivalbot/redcards?startapp=${createdId}`,
+      "claim red packet"
+    );
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openTelegramLink(url);
+    }
+  }
+
   return (
-    <div className="w-4/5 mx-auto mt-5 bg-gray-200 rounded-xl">
+    <div className="w-4/5 mx-auto mt-5 bg-gray-200 rounded-xl relative">
+      <div className="absolute z-50 top-0 left-0 flex justify-between gap-2 w-full">
+        <div className="bg-black rounded-lg text-white px-2 py-1">
+          <HiMiniShare onClick={() => handleShare(packet?.id)} />
+        </div>
+      </div>
       <div className="relative w-full h-96 rounded-xl">
         <Image
           src={
