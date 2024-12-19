@@ -48,7 +48,6 @@ import { useRouter } from "next/navigation";
 
 import { createTelegramShareLink } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import WebApp from "@twa-dev/sdk";
 
 const coverImages = [
   "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
@@ -156,7 +155,7 @@ export default function RedForm() {
       "claim red packet"
     );
     if (window.Telegram?.WebApp) {
-      WebApp.openTelegramLink(url);
+      window.Telegram.WebApp.openTelegramLink(url);
     }
   }
 

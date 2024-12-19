@@ -42,7 +42,7 @@ function Home() {
                   />
                 </div>
 
-                <div className="px-3 mt-2">
+                <div className="px-5 mt-2">
                   <p className="text-sm text-stone-600 text-center  font-bold">
                     {redpacket.asset} red packet {redpacket.amount}
                     {redpacket.asset} / {redpacket.noOfTickets} Packs
