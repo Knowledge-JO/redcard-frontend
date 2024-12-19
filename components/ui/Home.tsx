@@ -28,7 +28,7 @@ function Home() {
         ) : (
           redpackets?.map((redpacket) => (
             <Link href={`/packet/${redpacket.id}`} key={redpacket.id}>
-              <div className="bg-gray-200 rounded-xl max-w-40">
+              <div className="bg-gray-200 rounded-xl max-w-48">
                 <div className="relative w-full h-44 rounded-xl">
                   <Image
                     src={
@@ -42,7 +42,7 @@ function Home() {
                   />
                 </div>
 
-                <p className="text-[10px] text-stone-600 text-center px-2 pt-2 font-bold">
+                <p className="text-sm text-stone-600 text-center px-2 pt-2 font-bold">
                   {redpacket.asset} red packet {redpacket.amount}
                   {redpacket.asset} / {redpacket.noOfTickets} Packs
                 </p>
