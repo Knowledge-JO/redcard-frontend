@@ -173,6 +173,7 @@ export default function RedForm() {
 
   function handleDeposit() {
     if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.close();
       window.Telegram.WebApp.openTelegramLink(
         "https://t.me/redcardfestivalbot?start=deposit"
       );
