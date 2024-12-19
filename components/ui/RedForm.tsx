@@ -171,13 +171,29 @@ export default function RedForm() {
     reader.readAsDataURL(file);
   }
 
+  function handleDeposit() {
+    if (window.Telegram?.WebApp) {
+      window.Telegram.WebApp.openTelegramLink(
+        "https://t.me/redcardfestivalbot?start=deposit"
+      );
+    }
+  }
+
   return (
     <div className="">
       <div className="px-3 mt-5">
         {asset && (
-          <p className="text-stone-600 text-sm font-bold mb-2">
-            {t("balance.asset_balance")}: {balance}
-          </p>
+          <div className="flex items-center gap-2 mb-2">
+            <p className="text-stone-600 text-sm font-bold ">
+              {t("balance.asset_balance")}: {balance}
+            </p>
+            <Button
+              className="h-4 bg-orange-600 hover:bg-orange-700 text-xs"
+              onClick={handleDeposit}
+            >
+              Deposit
+            </Button>
+          </div>
         )}
         <form className="">
           <div className={`flex gap-3  ${asset ? "mt-4" : "mt-8"}`}>
@@ -292,7 +308,7 @@ export default function RedForm() {
               </div>
             </Modal.Open>
 
-            <Modal.Open openId="telegram">
+            {/* <Modal.Open openId="telegram">
               <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
                 <div className="flex items-center gap-2">
                   <HiUserGroup className="text-yellow-500 text-2xl" />
@@ -301,7 +317,7 @@ export default function RedForm() {
 
                 <HiOutlineChevronRight />
               </div>
-            </Modal.Open>
+            </Modal.Open> */}
 
             <Modal.Window openId={"cover"} title={t("envelope.header")}>
               <div className="mt-5 grid grid-cols-3 gap-2 justify-items-center px-3">
