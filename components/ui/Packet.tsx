@@ -49,7 +49,7 @@ function Packet({ id }: { id: string }) {
 
   async function handleShare(createdId: number | undefined) {
     const url = createTelegramShareLink(
-      `https://redcard.vercel.app/packet/${createdId}`,
+      `https://t.me/redcardfestivalbot?startapp=${createdId}`,
       "claim red packet"
     );
     if (window.Telegram?.WebApp) {

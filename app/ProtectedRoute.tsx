@@ -6,10 +6,13 @@ import WebApp from "@twa-dev/sdk";
 import { Platforms } from "@twa-dev/types";
 import Image from "next/image";
 import noView from "@/public/noview.webp";
+import { useRouter } from "next/navigation";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { setUserId, setUsername, setFirstName } = usePublicContext();
   const [platform, setPlatform] = useState<Platforms>();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!window.Telegram) return console.log("Invalid environment");
@@ -25,6 +28,13 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
     setFirstName(first_name);
     setUserId(telegramId);
   }, [setUsername, setFirstName, setUserId]);
+
+  useEffect(() => {
+    const startParam = WebApp.initDataUnsafe.start_param;
+    if (startParam) {
+      router.push(`https://redcard.vercel.app/packet/${startParam}`);
+    }
+  }, [router]);
 
   if (platform == "tdesktop" || platform == "unknown")
     return (

@@ -151,7 +151,7 @@ export default function RedForm() {
 
   async function handleShare() {
     const url = createTelegramShareLink(
-      `https://t.me/redcardfestivalbot/redcards?startapp=${createdId}`,
+      `https://t.me/redcardfestivalbot?startapp=${createdId}`,
       "claim red packet"
     );
     if (window.Telegram?.WebApp) {
