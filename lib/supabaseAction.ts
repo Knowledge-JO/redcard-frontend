@@ -13,7 +13,10 @@ async function getRedCards(): Promise<ITicket[]> {
   return redcards;
 }
 
-async function insertRedCard(data: TicketType, imageData: FormData) {
+async function insertRedCard(
+  data: TicketType,
+  imageData: FormData
+): Promise<ITicket> {
   const unclaimed_packets: UnclaimedCheckType[] = [];
 
   const image = imageData.get("image") as Blob;
@@ -49,7 +52,7 @@ async function insertRedCard(data: TicketType, imageData: FormData) {
     if (uploadError) throw new Error(uploadError.message);
   }
 
-  const { error } = await supabase
+  const { data: card, error } = await supabase
     .from("redcards")
     .insert([
       {
@@ -59,9 +62,12 @@ async function insertRedCard(data: TicketType, imageData: FormData) {
         password: hash,
       },
     ])
-    .select();
+    .select()
+    .single();
 
   if (error) throw new Error(error.message);
+
+  return card;
 }
 
 export { insertRedCard, getRedCards };

@@ -42,15 +42,18 @@ function Home() {
                   />
                 </div>
 
-                <p className="text-sm text-stone-600 text-center px-2 pt-2 font-bold">
-                  {redpacket.asset} red packet {redpacket.amount}
-                  {redpacket.asset} / {redpacket.noOfTickets} Packs
-                </p>
-                <p className="text-xs text-orange-700 text-center px-2 pb-2">
-                  Available{" "}
-                  {redpacket.unclaimed_checks?.length || redpacket.noOfTickets}{" "}
-                  / {redpacket.noOfTickets}
-                </p>
+                <div className="px-3 mt-2">
+                  <p className="text-sm text-stone-600 text-center  font-bold">
+                    {redpacket.asset} red packet {redpacket.amount}
+                    {redpacket.asset} / {redpacket.noOfTickets} Packs
+                  </p>
+                  <p className="text-xs text-orange-700 text-center  pb-2">
+                    Available{" "}
+                    {redpacket.unclaimed_checks?.length ||
+                      redpacket.noOfTickets}{" "}
+                    / {redpacket.noOfTickets}
+                  </p>
+                </div>
               </div>
             </Link>
           ))

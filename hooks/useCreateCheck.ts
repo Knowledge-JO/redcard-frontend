@@ -2,11 +2,14 @@
 
 import { TicketType } from "@/lib/dataTypes";
 import { insertRedCard } from "@/lib/supabaseAction";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 export function useCreateCheck() {
-  const queryClient = useQueryClient();
-  const { mutate: createCheck, isPending: isCreating } = useMutation({
+  const {
+    mutate: createCheck,
+    isPending: isCreating,
+    isSuccess,
+  } = useMutation({
     mutationFn: async ({
       data,
       image,
@@ -14,11 +17,9 @@ export function useCreateCheck() {
       data: TicketType;
       image: FormData;
     }) => {
-      await insertRedCard(data, image);
-
-      await queryClient.invalidateQueries();
+      return await insertRedCard(data, image);
     },
   });
 
-  return { createCheck, isCreating };
+  return { createCheck, isCreating, isSuccess };
 }

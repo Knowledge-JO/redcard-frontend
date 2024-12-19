@@ -46,6 +46,9 @@ import { useCreateCheck } from "@/hooks/useCreateCheck";
 import { TicketType } from "@/lib/dataTypes";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import WebApp from "@twa-dev/sdk";
+import { createTelegramShareLink } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 const coverImages = [
   "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
@@ -67,12 +70,15 @@ export default function RedForm() {
   const [password, setPassword] = useState("");
 
   const [errorCreating, setErrorCreating] = useState("");
+  const [createdId, setCreatedId] = useState<number>();
+
+  const queryClient = useQueryClient();
 
   const { t } = useTranslation();
 
   const { setActiveId: close } = usePublicContext();
 
-  const { createCheck, isCreating } = useCreateCheck();
+  const { createCheck, isCreating, isSuccess } = useCreateCheck();
 
   const router = useRouter();
 
@@ -133,12 +139,23 @@ export default function RedForm() {
     createCheck(
       { data, image: formData },
       {
-        onSuccess: () => router.push("/"),
+        onSuccess: async (data) => {
+          setCreatedId(data.id);
+          await queryClient.invalidateQueries();
+        },
         onError: (error) => {
           setErrorCreating(error.message);
         },
       }
     );
+  }
+
+  async function handleShare() {
+    const url = createTelegramShareLink(
+      `https://t.me/redcardfestivalbot/redcards?startapp=${createdId}`,
+      "claim red packet"
+    );
+    WebApp.openTelegramLink(url);
   }
 
   function fileReader(image: FileList | null) {
@@ -286,10 +303,10 @@ export default function RedForm() {
             </Modal.Open>
 
             <Modal.Window openId={"cover"} title={t("envelope.header")}>
-              <div className="mt-5 grid grid-cols-3 gap-3 justify-items-center px-3">
+              <div className="mt-5 grid grid-cols-3 gap-2 justify-items-center px-3">
                 {coverImages.map((cover, index) => (
                   <div
-                    className="bg-gray-200 w-[110px] rounded-xl"
+                    className="bg-gray-200 w-full rounded-xl"
                     key={cover}
                     onClick={() => {
                       setSelectedCover({
@@ -304,7 +321,7 @@ export default function RedForm() {
                       close("");
                     }}
                   >
-                    <div className="relative h-44 rounded-xl">
+                    <div className="relative h-44 rounded-xl w-full">
                       <Image
                         src={cover}
                         alt=""
@@ -395,20 +412,29 @@ export default function RedForm() {
                     {asset} Red envelope: {amount}
                     {asset} / {tickets} tickets
                   </p>
-                  <Button
-                    className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleCreateCheck();
-                    }}
-                    disabled={isCreating}
-                  >
-                    {isCreating ? (
-                      <ClipLoader color="#fff" size={20} />
-                    ) : (
-                      "Create"
-                    )}
-                  </Button>
+                  {isSuccess ? (
+                    <Button
+                      className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
+                      onClick={handleShare}
+                    >
+                      Share
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCreateCheck();
+                      }}
+                      disabled={isCreating}
+                    >
+                      {isCreating ? (
+                        <ClipLoader color="#fff" size={20} />
+                      ) : (
+                        "Create"
+                      )}
+                    </Button>
+                  )}
 
                   {errorCreating && (
                     <p className="text-red-600 mt-1">{errorCreating}</p>

@@ -33,3 +33,12 @@ export function distributePrizeUnevenly(
 
   return prizeDistribution;
 }
+
+export function createTelegramShareLink(url: string, text: string) {
+  const baseURL = "https://t.me/share/url";
+  const params = new URLSearchParams({
+    url: url,
+    text: text,
+  });
+  return `${baseURL}?${params.toString()}`;
+}
