@@ -45,8 +45,7 @@ import { ClipLoader } from "react-spinners";
 import { useCreateCheck } from "@/hooks/useCreateCheck";
 import { TicketType } from "@/lib/dataTypes";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import WebApp from "@twa-dev/sdk";
+
 import { createTelegramShareLink } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -155,7 +154,9 @@ export default function RedForm() {
       `https://t.me/redcardfestivalbot/redcards?startapp=${createdId}`,
       "claim red packet"
     );
-    WebApp.openTelegramLink(url);
+    if (window.Telegram?.Webapp) {
+      window.Telegram.Webapp.openTelegramLink(url);
+    }
   }
 
   function fileReader(image: FileList | null) {
