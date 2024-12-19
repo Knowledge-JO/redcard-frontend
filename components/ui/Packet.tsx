@@ -41,7 +41,7 @@ function Packet({ id }: { id: string }) {
       },
 
       {
-        onError: (error) => setError(error.message),
+        onError: () => setError("you are unable to claim packet"),
         onSuccess: () => setError(""),
       }
     );
