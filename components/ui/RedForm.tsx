@@ -1,8 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { HiGiftTop, HiOutlineChevronRight, HiPhoto } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
+import { CryptoCurrencyCode } from "crypto-bot-api";
 import { Button } from "@/components/ui/button";
-import Modal from "./Modal";
 import {
   Select,
   SelectContent,
@@ -12,48 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
 import SelectItems from "@/components/ui/SelectItems";
-import Image from "next/image";
-import {
-  HiGiftTop,
-  HiMiniArrowTopRightOnSquare,
-  HiOutlineChevronRight,
-  HiPhoto,
-  HiUserGroup,
-} from "react-icons/hi2";
-
-import { usePublicContext } from "@/context/PublicProvider";
-import noview from "@/public/noview.webp";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-
-import { CryptoCurrencyCode } from "crypto-bot-api";
 import { getBal } from "@/lib/action";
-
-import { ClipLoader } from "react-spinners";
-import { useCreateCheck } from "@/hooks/useCreateCheck";
 import { TicketType } from "@/lib/dataTypes";
-import { useRouter } from "next/navigation";
-
-import { createTelegramShareLink } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-
-const coverImages = [
-  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover1.jpg",
-  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover2.jpg",
-  "https://oghibjysbqokcedkbicl.supabase.co/storage/v1/object/public/covers/cover3.jpg",
-];
+import { useCreateCheck } from "@/hooks/useCreateCheck";
+import Modal from "./Modal";
+import Cover from "./Cover";
+import Review from "./Review";
 
 export default function RedForm() {
   const [selectedCover, setSelectedCover] = useState({ url: "", text: "" });
@@ -75,11 +42,7 @@ export default function RedForm() {
 
   const { t } = useTranslation();
 
-  const { setActiveId: close } = usePublicContext();
-
   const { createCheck, isCreating, isSuccess } = useCreateCheck();
-
-  const router = useRouter();
 
   useEffect(() => {
     async function balance() {
@@ -147,28 +110,6 @@ export default function RedForm() {
         },
       }
     );
-  }
-
-  async function handleShare() {
-    const url = createTelegramShareLink(
-      `https://t.me/redcardfestivalbot?startapp=${createdId}`,
-      "claim red packet"
-    );
-    if (window.Telegram?.WebApp) {
-      window.Telegram.WebApp.openTelegramLink(url);
-    }
-  }
-
-  function fileReader(image: FileList | null) {
-    if (!image) return;
-    const file = image[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      if (reader.result instanceof ArrayBuffer) return;
-      setSelectedCover({ text: file.name, url: reader.result || "" });
-    };
-    reader.readAsDataURL(file);
   }
 
   function handleDeposit() {
@@ -309,91 +250,11 @@ export default function RedForm() {
               </div>
             </Modal.Open>
 
-            {/* <Modal.Open openId="telegram">
-              <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
-                <div className="flex items-center gap-2">
-                  <HiUserGroup className="text-yellow-500 text-2xl" />
-                  <p>{t("telegram_channel.text")}</p>
-                </div>
-
-                <HiOutlineChevronRight />
-              </div>
-            </Modal.Open> */}
-
             <Modal.Window openId={"cover"} title={t("envelope.header")}>
-              <div className="mt-5 grid grid-cols-3 gap-2 justify-items-center px-3">
-                {coverImages.map((cover, index) => (
-                  <div
-                    className="bg-gray-200 w-full rounded-xl"
-                    key={cover}
-                    onClick={() => {
-                      setSelectedCover({
-                        url: cover,
-                        text: (
-                          t("image_covers.covers", {
-                            returnObjects: true,
-                          }) as string[]
-                        )[index],
-                      });
-
-                      close("");
-                    }}
-                  >
-                    <div className="relative h-44 rounded-xl w-full">
-                      <Image
-                        src={cover}
-                        alt=""
-                        fill
-                        className="object-cover rounded-xl"
-                      />
-                    </div>
-                    <p className="text-xs px-2 text-center text-stone-600 py-2">
-                      {
-                        (
-                          t("image_covers.covers", {
-                            returnObjects: true,
-                          }) as string[]
-                        )[index]
-                      }
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="px-3 py-5 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
-                <div className="flex text-white items-center px-2 py-2 bg-orange-600 hover:bg-orange-700 rounded-xl gap-1">
-                  <label htmlFor="cover-image" className="text-sm">
-                    Upload cover
-                  </label>
-                  <input
-                    className="hidden"
-                    id="cover-image"
-                    type="file"
-                    onChange={(e) => {
-                      if (!e.target.files) return;
-                      setSelectedImage(e.target.files[0]);
-                      fileReader(e.target.files);
-                      close("");
-                    }}
-                  />
-                  <HiMiniArrowTopRightOnSquare />
-                </div>
-              </div>
-            </Modal.Window>
-
-            <Modal.Window
-              openId={"telegram"}
-              title={t("telegram_channel.header")}
-            >
-              <div className="mt-10 flex justify-center">
-                <div>
-                  <div className="relative h-44 w-44">
-                    <Image src={noview} fill alt="" className="object-cover" />
-                  </div>
-                  <p className="text-stone-500 text-center font-bold">
-                    {t("telegram_channel.message")}
-                  </p>
-                </div>
-              </div>
+              <Cover
+                setSelectedCover={setSelectedCover}
+                setSelectedImage={setSelectedImage}
+              />
             </Modal.Window>
           </Modal>
 
@@ -404,63 +265,18 @@ export default function RedForm() {
             onChange={(e) => setMessage(e.target.value)}
           />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full bg-orange-600 hover:bg-orange-700 rounded-xl mt-5">
-                Continue
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="w-fit rounded-xl">
-              <DialogTitle>Review redcard</DialogTitle>
-
-              <div className="w-60 mx-auto">
-                <div className="w-60 h-72 relative rounded-xl">
-                  <Image
-                    src={selectedCover.url}
-                    alt=""
-                    fill
-                    className="object-cover rounded-xl"
-                  />
-                </div>
-
-                <div className="text-center text-sm">
-                  <p className="my-2">{message}</p>
-                  <p className="text-xs">
-                    {asset} Red envelope: {amount}
-                    {asset} / {tickets} tickets
-                  </p>
-                  {isSuccess ? (
-                    <Button
-                      className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
-                      onClick={handleShare}
-                    >
-                      Share
-                    </Button>
-                  ) : (
-                    <Button
-                      className="w-full mt-2 bg-orange-600 hover:bg-orange-700 rounded-xl"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleCreateCheck();
-                      }}
-                      disabled={isCreating}
-                    >
-                      {isCreating ? (
-                        <ClipLoader color="#fff" size={20} />
-                      ) : (
-                        "Create"
-                      )}
-                    </Button>
-                  )}
-
-                  {errorCreating && (
-                    <p className="text-red-600 mt-1">{errorCreating}</p>
-                  )}
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <Review
+            selectedCover={selectedCover}
+            message={message}
+            asset={asset}
+            tickets={tickets}
+            amount={amount}
+            errorCreating={errorCreating}
+            createdId={createdId}
+            isCreating={isCreating}
+            isSuccess={isSuccess}
+            handleCreateCheck={handleCreateCheck}
+          />
         </form>
       </div>
     </div>

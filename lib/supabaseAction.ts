@@ -7,7 +7,10 @@ import { distributePrizeUnevenly } from "./utils";
 import bycrypt from "bcryptjs";
 
 async function getRedCards(): Promise<ITicket[]> {
-  const { data: redcards, error } = await supabase.from("redcards").select("*");
+  const { data: redcards, error } = await supabase
+    .from("redcards")
+    .select("*")
+    .order("id", { ascending: false });
 
   if (error) throw new Error(error.message);
   return redcards;
