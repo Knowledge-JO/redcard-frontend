@@ -20,34 +20,6 @@ async function getBal(asset: CryptoCurrencyCode) {
   return balance.available;
 }
 
-async function deletePayCheck(id: number) {
-  await client.deleteCheck(id);
-  const { data, error } = await supabase
-    .from("redcards")
-    .select("id,checks")
-    .contains("checks", [id])
-    .single();
-
-  if (error) throw new Error(error.message);
-
-  if (!data) return;
-
-  const newChecks = data.checks.filter((check: number) => check != id);
-
-  const query = supabase.from("redcards");
-  if (data.checks.length > 1) {
-    const { error } = await query
-      .update({ checks: newChecks })
-      .eq("id", data.id);
-
-    if (error) throw new Error(error.message);
-  } else {
-    console.log("updating...");
-    const { error } = await query.delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
-  }
-}
-
 async function claimPacket({
   id,
   userId,
@@ -118,4 +90,4 @@ async function claimPacket({
   return check.botCheckUrl;
 }
 
-export { deletePayCheck, getBal, getChecks, claimPacket };
+export { getBal, getChecks, claimPacket };
