@@ -8,7 +8,7 @@ import { MoonLoader } from "react-spinners";
 
 export default function TelegramChats() {
   const { telegramChats, fetchingChats } = useTelegramChats();
-
+  console.log(telegramChats);
   if (fetchingChats)
     return (
       <div className="flex justify-center mt-10 w-full">
@@ -22,6 +22,7 @@ export default function TelegramChats() {
           Telegram chats
         </div>
         <ul className="space-y-3">
+          {telegramChats?.length == 0 && <div>No chats</div>}
           {telegramChats?.map((content, id) => (
             <Link key={content.chatId} href={`config/${content.chatId}`}>
               <li className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 ease-in-out cursor-pointer">

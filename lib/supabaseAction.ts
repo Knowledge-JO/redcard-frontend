@@ -73,12 +73,13 @@ async function insertRedCard(
   return card;
 }
 
-async function getTelegramChats(): Promise<
-  { chatId: number; chatName: string }[]
-> {
+async function getTelegramChats(
+  userId: number
+): Promise<{ chatId: number; chatName: string }[]> {
   const { data: telegram, error } = await supabase
     .from("telegram")
-    .select("chatId,chatName");
+    .select("chatId,chatName")
+    .eq("creatorId", userId);
   if (error) {
     throw new Error(error.message);
   }
