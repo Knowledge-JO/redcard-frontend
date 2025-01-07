@@ -73,13 +73,28 @@ async function insertRedCard(
   return card;
 }
 
+type TelegramChatsType = {
+  chatId: number;
+  chatName: string;
+  inappropriateKeywords: string[];
+  allowedLinks: string[];
+  imageUrl: string;
+  message: string;
+  admins: string[];
+  keywordReplies: {
+    keyword: string;
+    replyContent: string;
+  }[];
+};
+
 async function getTelegramChats(
-  userId: number
-): Promise<{ chatId: number; chatName: string }[]> {
+  userId: number,
+  username: string
+): Promise<TelegramChatsType[]> {
   const { data: telegram, error } = await supabase
     .from("telegram")
-    .select("chatId,chatName")
-    .eq("creatorId", userId);
+    .select("*")
+    .or(`creatorId.eq.${userId},admins.cs.{${username}}`);
   if (error) {
     throw new Error(error.message);
   }
@@ -219,6 +234,128 @@ async function updateAllowedLinks(...args: string[]) {
   }
 }
 
+async function updateAdmins(...args: string[]) {
+  const chatId = args[0];
+  const adminUsername = args[1];
+  const data = await getTelegramDataByChatId(+chatId);
+  const chatData = data ? data : [];
+
+  if (chatData.length > 0) {
+    const chat = chatData[0];
+    const admins = chat.admins ? chat.admins : [];
+    const { error } = await supabase
+      .from("telegram")
+      .update({ admins: [...admins, adminUsername] })
+      .eq("chatId", chatId)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
+async function removeAdmin(...args: string[]) {
+  const chatId = args[0];
+  const adminUsername = args[1];
+  const data = await getTelegramDataByChatId(+chatId);
+  const chatData = data ? data : [];
+
+  if (chatData.length > 0) {
+    const chat = chatData[0];
+    const admins = chat.admins ? chat.admins : [];
+    if (admins.length == 0) throw new Error("No admins found");
+    const filtered = admins.filter((admin: string) => admin !== adminUsername);
+    const { error } = await supabase
+      .from("telegram")
+      .update({ admins: [...filtered] })
+      .eq("chatId", chatId)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
+async function removeLink(...args: string[]) {
+  const chatId = args[0];
+  const link = args[1];
+  const data = await getTelegramDataByChatId(+chatId);
+  const chatData = data ? data : [];
+
+  if (chatData.length > 0) {
+    const chat = chatData[0];
+    const allowedLinks = chat.allowedLinks ? chat.allowedLinks : [];
+    if (allowedLinks.length == 0) throw new Error("No links found");
+    const filtered = allowedLinks.filter(
+      (allowedLink: string) => allowedLink !== link
+    );
+    const { error } = await supabase
+      .from("telegram")
+      .update({ allowedLinks: [...filtered] })
+      .eq("chatId", chatId)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
+async function removeInappropriateWord(...args: string[]) {
+  const chatId = args[0];
+  const word = args[1];
+  const data = await getTelegramDataByChatId(+chatId);
+  const chatData = data ? data : [];
+
+  if (chatData.length > 0) {
+    const chat = chatData[0];
+    const blacklistedWords = chat.inappropriateKeywords
+      ? chat.inappropriateKeywords
+      : [];
+    if (blacklistedWords.length == 0)
+      throw new Error("No blacklisted words found");
+    const filtered = blacklistedWords.filter(
+      (blacklistedWord: string) => blacklistedWord !== word
+    );
+    const { error } = await supabase
+      .from("telegram")
+      .update({ inappropriateKeywords: [...filtered] })
+      .eq("chatId", chatId)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
+async function removeKeywordReply(...args: string[]) {
+  const chatId = args[0];
+  const keyword = args[1];
+  const data = await getTelegramDataByChatId(+chatId);
+  const chatData = data ? data : [];
+
+  if (chatData.length > 0) {
+    const chat = chatData[0];
+    const keywordReplies = chat.keywordReplies ? chat.keywordReplies : [];
+    if (keywordReplies.length == 0) throw new Error("No keyword replies found");
+    const filtered = keywordReplies.filter(
+      (keywordReply: { keyword: string }) => keywordReply.keyword !== keyword
+    );
+    const { error } = await supabase
+      .from("telegram")
+      .update({ keywordReplies: [...filtered] })
+      .eq("chatId", chatId)
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+}
+
 export {
   insertRedCard,
   getRedCards,
@@ -228,4 +365,9 @@ export {
   updateInappropiateWords,
   updateAllowedLinks,
   getTelegramChats,
+  removeLink,
+  removeInappropriateWord,
+  removeKeywordReply,
+  updateAdmins,
+  removeAdmin,
 };
