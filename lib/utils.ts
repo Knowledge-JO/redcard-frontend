@@ -42,17 +42,3 @@ export function createTelegramShareLink(url: string, text: string) {
   });
   return `${baseURL}?${params.toString()}`;
 }
-
-export function fileToBlob(file: File) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      resolve(new Blob([reader.result || ""], { type: file.type }));
-    };
-
-    reader.onerror = reject;
-
-    reader.readAsArrayBuffer(file);
-  });
-}
