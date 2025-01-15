@@ -16,61 +16,7 @@ import {
   updateKeywordReplies,
   updateWelcomeMessage,
 } from "@/lib/supabaseAction";
-
-const formsData = [
-  {
-    id: 0,
-    type: "admins",
-    title: "Add dashboard admin",
-    placeholder: "Enter admin username",
-    func: updateAdmins,
-    deleteFunc: removeAdmin,
-    multi: false,
-  },
-  {
-    id: 1,
-    type: "image",
-    title: "Update welcome image",
-    placeholder: "Chose image",
-    multi: false,
-  },
-  {
-    id: 2,
-    type: "welcome",
-    title: "Update welcome message",
-    placeholder: "Enter welcome message",
-    func: updateWelcomeMessage,
-    multi: false,
-  },
-  {
-    id: 3,
-    type: "blacklist",
-    title: "Blacklist words",
-    func: updateInappropiateWords,
-    deleteFunc: removeInappropriateWord,
-    placeholder: "Enter words to blacklist, separated by commas",
-    multi: false,
-  },
-  {
-    id: 4,
-    type: "allow",
-    title: "Allow links",
-    placeholder: "Enter links to allow, separated by commas",
-    func: updateAllowedLinks,
-    deleteFunc: removeLink,
-    multi: false,
-  },
-  {
-    id: 5,
-    type: "auto-reply",
-    title: "Update auto reply keywords",
-    placeholder: "Enter keyword",
-    replyHolder: "Enter reply",
-    func: updateKeywordReplies,
-    deleteFunc: removeKeywordReply,
-    multi: true,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function CollapsibleForms({ chatId }: { chatId: string }) {
   const [openForm, setOpenForm] = useState<number | null>(null);
@@ -78,6 +24,63 @@ export default function CollapsibleForms({ chatId }: { chatId: string }) {
   const { telegramChats, fetchingChats } = useTelegramChats();
 
   const telegramChat = telegramChats?.find((chat) => chat.chatId == +chatId);
+
+  const { t } = useTranslation();
+
+  const formsData = [
+    {
+      id: 0,
+      type: "admins",
+      title: t("bot_configs.add_admin"),
+      placeholder: t("bot_configs.placeholders.admin_form"),
+      func: updateAdmins,
+      deleteFunc: removeAdmin,
+      multi: false,
+    },
+    {
+      id: 1,
+      type: "image",
+      title: t("bot_configs.welcome_img"),
+      placeholder: t("bot_configs.placeholders.welcome_img"),
+      multi: false,
+    },
+    {
+      id: 2,
+      type: "welcome",
+      title: t("bot_configs.welcome_msg"),
+      placeholder: t("bot_configs.placeholders.welcome_msg"),
+      func: updateWelcomeMessage,
+      multi: false,
+    },
+    {
+      id: 3,
+      type: "blacklist",
+      title: t("bot_configs.blacklist"),
+      func: updateInappropiateWords,
+      deleteFunc: removeInappropriateWord,
+      placeholder: t("bot_configs.placeholders.blacklist"),
+      multi: false,
+    },
+    {
+      id: 4,
+      type: "allow",
+      title: t("bot_configs.allow_links"),
+      placeholder: t("bot_configs.placeholders.allow_links"),
+      func: updateAllowedLinks,
+      deleteFunc: removeLink,
+      multi: false,
+    },
+    {
+      id: 5,
+      type: "auto-reply",
+      title: t("bot_configs.keyword_reply"),
+      placeholder: t("bot_configs.placeholders.keyword_reply"),
+      replyHolder: t("bot_configs.placeholders.reply_holder"),
+      func: updateKeywordReplies,
+      deleteFunc: removeKeywordReply,
+      multi: true,
+    },
+  ];
 
   const toggleForm = (id: number) => {
     setOpenForm(openForm === id ? null : id);
@@ -100,7 +103,7 @@ export default function CollapsibleForms({ chatId }: { chatId: string }) {
 
       <div className="max-w-3xl mx-auto p-4 space-y-4">
         <h1 className="text-2xl font-bold mb-6 text-orange-600">
-          Bot Configurations
+          {t("bot_configs.title")}
         </h1>
         {formsData.map((form) => (
           <CollapsibleForm

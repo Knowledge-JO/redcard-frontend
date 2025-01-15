@@ -21,6 +21,7 @@ import { useCreateCheck } from "@/hooks/useCreateCheck";
 import Modal from "./Modal";
 import Cover from "./Cover";
 import Review from "./Review";
+import SecondaryNav from "./SecondaryNav";
 
 export default function RedForm() {
   const [selectedCover, setSelectedCover] = useState({ url: "", text: "" });
@@ -122,163 +123,175 @@ export default function RedForm() {
   }
 
   return (
-    <div className="">
-      <div className="px-3 mt-5">
-        {asset && (
-          <div className="flex items-center gap-2 mb-2">
-            <p className="text-stone-600 text-sm font-bold ">
-              {t("balance.asset_balance")}: {balance}
-            </p>
-            <Button
-              className="h-4 bg-orange-600 hover:bg-orange-700 text-xs"
-              onClick={handleDeposit}
-            >
-              Deposit
-            </Button>
-          </div>
-        )}
-        <form className="">
-          <div className={`flex gap-3  ${asset ? "mt-4" : "mt-8"}`}>
-            <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
-              <Select
-                required
-                onValueChange={(value) => setType(value)}
-                value={type}
+    <>
+      <SecondaryNav to="/">
+        <p>{t("create_red_cards")}</p>
+      </SecondaryNav>
+
+      <div className="">
+        <div className="px-3 mt-5">
+          {asset && (
+            <div className="flex items-center gap-2 mb-2">
+              <p className="text-stone-600 text-sm font-bold ">
+                {t("balance.asset_balance")}: {balance}
+              </p>
+              <Button
+                className="h-4 bg-orange-600 hover:bg-orange-700 text-xs"
+                onClick={handleDeposit}
               >
-                <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
-                  <SelectValue placeholder={t("input.select_ticket_type")} />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Red packet types</SelectLabel>
-                    <SelectItem value="fixed">Fixed red packet</SelectItem>
-                    <SelectItem value="lucky">Lucky red packet</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
-              <Select required onValueChange={(value) => setMode(value)}>
-                <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
-                  <SelectValue placeholder={t("input.select_ticket_mode")} />
-                </SelectTrigger>
-
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Red packet modes</SelectLabel>
-                    <SelectItem value="normal">Normal red packet</SelectItem>
-                    <SelectItem value="password">
-                      Password red packet
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {mode == "password" && (
-            <div className="bg-gray-200 rounded-xl h-10 flex items-center justify-between mt-4 max-w-full">
-              <input
-                type="text"
-                className="bg-transparent text-stone-600 h-full w-full px-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500  focus:ring-offset-2"
-                placeholder="Enter packet password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+                {t("balance.deposit")}
+              </Button>
             </div>
           )}
+          <form className="">
+            <div className={`flex gap-3  ${asset ? "mt-4" : "mt-8"}`}>
+              <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
+                <Select
+                  required
+                  onValueChange={(value) => setType(value)}
+                  value={type}
+                >
+                  <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+                    <SelectValue placeholder={t("input.select_ticket_type")} />
+                  </SelectTrigger>
 
-          <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between mt-4 max-w-full">
-            <Select
-              onValueChange={(value) => setAsset(value as CryptoCurrencyCode)}
-            >
-              <SelectTrigger className="w-[110px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
-                <SelectValue placeholder={t("input.select_currency")} />
-              </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>{t("red_packet_type.title")}</SelectLabel>
+                      <SelectItem value="fixed">
+                        {t("red_packet_type.type1")}
+                      </SelectItem>
+                      <SelectItem value="lucky">
+                        {t("red_packet_type.type2")}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
 
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>{t("input.currency_title")}</SelectLabel>
-                  <SelectItems />
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              <div className="bg-gray-200 rounded-xl py-1 px-2 flex items-center justify-between text-xs text-stone-700 w-full">
+                <Select required onValueChange={(value) => setMode(value)}>
+                  <SelectTrigger className="border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+                    <SelectValue placeholder={t("input.select_ticket_mode")} />
+                  </SelectTrigger>
 
-            <input
-              type="number"
-              min={0}
-              required
-              className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
-              placeholder={
-                type == "fixed"
-                  ? t("input.placeholder_currency")
-                  : "Enter total amount"
-              }
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
-
-          <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
-            <div className="flex items-center gap-2">
-              <HiGiftTop className="text-red-600 text-2xl" />
-              <p>{t("tickets.text")}</p>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>{t("red_packet_mode.title")}</SelectLabel>
+                      <SelectItem value="normal">
+                        {t("red_packet_mode.mode1")}
+                      </SelectItem>
+                      <SelectItem value="password">
+                        {t("red_packet_mode.mode2")}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
-            <input
-              type="number"
-              min={1}
-              className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
-              placeholder={t("tickets.placeholder_ticket")}
-              onChange={(e) => setTickets(Number(e.target.value))}
-            />
-          </div>
-
-          <Modal>
-            <Modal.Open openId="cover">
-              <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
-                <div className="flex items-center gap-2">
-                  <HiPhoto className="text-red-600 text-2xl" />
-                  <p>{t("envelope.text")}</p>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <p>{selectedCover.text || t("envelope.pick")}</p>
-                  <HiOutlineChevronRight />
-                </div>
+            {mode == "password" && (
+              <div className="bg-gray-200 rounded-xl h-10 flex items-center justify-between mt-4 max-w-full">
+                <input
+                  type="text"
+                  className="bg-transparent text-stone-600 h-full w-full px-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500  focus:ring-offset-2"
+                  placeholder="Enter packet password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-            </Modal.Open>
+            )}
 
-            <Modal.Window openId={"cover"} title={t("envelope.header")}>
-              <Cover
-                setSelectedCover={setSelectedCover}
-                setSelectedImage={setSelectedImage}
+            <div className="bg-gray-200 rounded-xl py-2 px-2 flex items-center justify-between mt-4 max-w-full">
+              <Select
+                onValueChange={(value) => setAsset(value as CryptoCurrencyCode)}
+              >
+                <SelectTrigger className="w-[110px] border-none text-stone-700 text-xs focus:ring-0 px-0 shadow-none">
+                  <SelectValue placeholder={t("input.select_currency")} />
+                </SelectTrigger>
+
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>{t("input.currency_title")}</SelectLabel>
+                    <SelectItems />
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <input
+                type="number"
+                min={0}
+                required
+                className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
+                placeholder={
+                  type == "fixed"
+                    ? t("input.placeholder_currency")
+                    : "Enter total amount"
+                }
+                onChange={(e) => setAmount(e.target.value)}
               />
-            </Modal.Window>
-          </Modal>
+            </div>
 
-          <textarea
-            placeholder={t("message.placeholder")}
-            className="mt-4 ring-2 ring-orange-500 px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl focus:ring-offset-2"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
+            <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
+              <div className="flex items-center gap-2">
+                <HiGiftTop className="text-red-600 text-2xl" />
+                <p>{t("tickets.text")}</p>
+              </div>
 
-          <Review
-            selectedCover={selectedCover}
-            message={message}
-            asset={asset}
-            tickets={tickets}
-            amount={amount}
-            errorCreating={errorCreating}
-            createdId={createdId}
-            isCreating={isCreating}
-            isSuccess={isSuccess}
-            handleCreateCheck={handleCreateCheck}
-          />
-        </form>
+              <input
+                type="number"
+                min={1}
+                className="bg-transparent text-right px-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-lg focus:ring-offset-2"
+                placeholder={t("tickets.placeholder_ticket")}
+                onChange={(e) => setTickets(Number(e.target.value))}
+              />
+            </div>
+
+            <Modal>
+              <Modal.Open openId="cover">
+                <div className="bg-gray-200 rounded-xl py-3 px-2 flex items-center justify-between mt-4 text-xs text-stone-700">
+                  <div className="flex items-center gap-2">
+                    <HiPhoto className="text-red-600 text-2xl" />
+                    <p>{t("envelope.text")}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <p>{selectedCover.text || t("envelope.pick")}</p>
+                    <HiOutlineChevronRight />
+                  </div>
+                </div>
+              </Modal.Open>
+
+              <Modal.Window openId={"cover"} title={t("envelope.header")}>
+                <Cover
+                  setSelectedCover={setSelectedCover}
+                  setSelectedImage={setSelectedImage}
+                />
+              </Modal.Window>
+            </Modal>
+
+            <textarea
+              placeholder={t("message.placeholder")}
+              className="mt-4 ring-2 ring-orange-500 px-2 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl focus:ring-offset-2"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+
+            <Review
+              selectedCover={selectedCover}
+              message={message}
+              asset={asset}
+              tickets={tickets}
+              amount={amount}
+              errorCreating={errorCreating}
+              createdId={createdId}
+              isCreating={isCreating}
+              isSuccess={isSuccess}
+              handleCreateCheck={handleCreateCheck}
+            />
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

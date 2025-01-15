@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { HiTrash } from "react-icons/hi2";
 import { useFileReader } from "@/hooks/useFileReader";
 import { updateWelcomeImage } from "@/lib/supabaseAction";
+import { useTranslation } from "react-i18next";
 
 interface CollapsibleFormProps {
   chatId: string;
@@ -68,6 +69,8 @@ export default function CollapsibleForm({
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteItem, setDeleteItem] = useState("");
+
+  const { t } = useTranslation();
 
   function content() {
     switch (type) {
@@ -264,7 +267,7 @@ export default function CollapsibleForm({
                           htmlFor="welcomeImage"
                           className="bg-orange-500 text-white px-2 py-1 rounded-md cursor-pointer"
                         >
-                          Select Image
+                          {placeholder}
                         </label>
                         <input
                           id="welcomeImage"
@@ -295,7 +298,7 @@ export default function CollapsibleForm({
                     {isUpdating ? (
                       <ClipLoader size={20} color="#fff" />
                     ) : (
-                      "Done"
+                      t("bot_configs.buttons.done")
                     )}
                   </button>
                 </div>

@@ -1,4 +1,16 @@
 {
+  "create_new_envelopes": "创建新红包",
+  "create_red_cards": "创建红包卡",
+  "red_packet_type": {
+    "title": "红包类型",
+    "type1": "固定红包",
+    "type2": "幸运红包"
+  },
+  "red_packet_mode": {
+    "title": "红包模式",
+    "mode1": "普通红包",
+    "mode2": "密码红包"
+  },
   "checks": {
     "ticket_id": "票证编号",
     "status": "地位",
@@ -14,7 +26,8 @@
     "status": "活性"
   },
   "balance": {
-    "asset_balance": "平衡"
+    "asset_balance": "平衡",
+    "deposit": "存款"
   },
   "main_header": {
     "text": "发红包",
@@ -50,5 +63,35 @@
 
   "submit_button": {
     "text": "提交"
+  },
+
+  "telegram_chat": {
+    "message": "目前没有频道",
+    "text": "电报频道",
+    "chats": "聊天"
+  },
+
+  "bot_configs": {
+    "title": "机器人配置",
+    "add_admin": "添加管理员",
+    "welcome_img": "更新欢迎图片",
+    "welcome_msg": "更新欢迎消息",
+    "keyword_reply": "更新自动回复关键词",
+    "blacklist": "更新黑名单词",
+    "allow_links": "更新允许链接",
+
+    "placeholders": {
+      "admin_form": "输入管理员用户名",
+      "welcome_img": "选择图片",
+      "welcome_msg": "输入欢迎消息",
+      "keyword_reply": "输入关键词和回复内容，用逗号分隔",
+      "reply_holder": "输入回复",
+      "blacklist": "输入黑名单词，用逗号分隔",
+      "allow_links": "输入允许链接，用逗号分隔"
+    },
+
+    "buttons": {
+      "done": "完成"
+    }
   }
 }

@@ -1,4 +1,16 @@
 {
+  "create_new_envelopes": "Create new envelopes",
+  "create_red_cards": "Create red cards",
+  "red_packet_type": {
+    "title": "Red packet types",
+    "type1": "Fixed red packet",
+    "type2": "Lucky red packet"
+  },
+  "red_packet_mode": {
+    "title": "Red packet modes",
+    "mode1": "Normal red packet",
+    "mode2": "Password red packet"
+  },
   "checks": {
     "ticket_id": "TicketId",
     "status": "status",
@@ -14,7 +26,8 @@
     "status": "activated"
   },
   "balance": {
-    "asset_balance": "balance"
+    "asset_balance": "balance",
+    "deposit": "Deposit"
   },
   "main_header": {
     "text": "Send red envelopes",
@@ -50,5 +63,33 @@
 
   "submit_button": {
     "text": "Submit"
+  },
+  "telegram_chat": {
+    "message": "No channels currently",
+    "text": "TELEGRAM CHATS",
+    "chats": "Chats"
+  },
+
+  "bot_configs": {
+    "title": "Bot Configurations",
+    "add_admin": "Add dashboard admin",
+    "welcome_img": "Update welcome image",
+    "welcome_msg": "Update welcome message",
+    "keyword_reply": "Update auto reply keywords",
+    "blacklist": "Blacklist words",
+    "allow_links": "Allow links",
+
+    "placeholders": {
+      "admin_form": "Enter admin username",
+      "welcome_img": "Select image",
+      "welcome_msg": "Enter welcome message",
+      "keyword_reply": "Enter keyword and reply content",
+      "reply_holder": "Enter reply",
+      "blacklist": "Enter blacklist words, separated by commas",
+      "allow_links": "Enter allow links, separated by commas"
+    },
+    "buttons": {
+      "done": "Done"
+    }
   }
 }

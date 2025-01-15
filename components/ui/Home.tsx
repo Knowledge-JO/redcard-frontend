@@ -63,7 +63,7 @@ function Home() {
       <div className="px-3 py-5 mt-8 font-bold flex items-center gap-2 fixed bottom-0">
         <Link href={"/create"}>
           <Button className="bg-orange-600 hover:bg-orange-700">
-            <p> Create new envelopes</p>
+            <p>{t("create_new_envelopes")}</p>
             <HiMiniArrowTopRightOnSquare />
           </Button>
         </Link>
