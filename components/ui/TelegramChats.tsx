@@ -23,7 +23,7 @@ export default function TelegramChats() {
   return (
     <>
       <SecondaryNav to="/">
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           <p>{t("telegram_chat.chats")}</p>
 
           <Switcher />
