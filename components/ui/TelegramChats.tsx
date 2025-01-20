@@ -7,6 +7,7 @@ import { useTelegramChats } from "@/hooks/useTelegramChats";
 import { MoonLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
 import SecondaryNav from "./SecondaryNav";
+import Switcher from "./Switcher";
 
 export default function TelegramChats() {
   const { telegramChats, fetchingChats } = useTelegramChats();
@@ -21,7 +22,13 @@ export default function TelegramChats() {
     );
   return (
     <>
-      <SecondaryNav to="/">{t("telegram_chat.chats")}</SecondaryNav>
+      <SecondaryNav to="/">
+        <div className="flex items-center">
+          <p>{t("telegram_chat.chats")}</p>
+
+          <Switcher />
+        </div>
+      </SecondaryNav>
       <div className="max-w-md mx-auto mt-10 bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
         <div className="p-8">
           <div className="uppercase tracking-wide text-sm text-orange-500 font-semibold mb-4">
